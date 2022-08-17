@@ -5,12 +5,12 @@ class Post(models.Model):
     """
     This is a table in our DB, Post is table name and below attributes are our field in our table
     """
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    # author = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=250)
     content = models.TextField()
     status = models.BooleanField(default=False)
     image = models.ImageField(blank=True,null=True)
-    category = models.ManyToManyField('Category',on_delete=models.SET_NULL,null=True)
+    category = models.ForeignKey('Category',on_delete=models.SET_NULL,null=True)
     published_date = models.DateTimeField()
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
