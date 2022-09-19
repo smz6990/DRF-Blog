@@ -1,0 +1,155 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head %}
+<title>Contact</title>
+{% endblock %}
+    
+
+{% block content %}
+    <!-- /breadcrumb -->
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a href="{% url 'website:index' %}">Home</a>
+      </li>
+      <li class="breadcrumb-item active">Contact</li>
+    </ol>
+
+    <!-- //breadcrumb -->
+    <!-- contact -->
+    <section class="banner-bottom-w3layouts pt-lg-5 pt-md-3 pt-3">
+      <div class="inner-sec-w3ls-agileits pt-md-5 pt-md-3 pt-3">
+        <h4 class="sub-tittle text-uppercase text-center">Find us</h4>
+        <h3 class="tittle text-center mb-lg-5 mb-3">Contact Us</h3>
+        <div class="container">
+          <div class="address row mb-5">
+            <div class="col-lg-4 address-grid">
+              <div class="row address-info">
+                <div class="col-md-3 address-left text-center">
+                  <i class="far fa-map"></i>
+                </div>
+                <div class="col-md-9 address-right text-left">
+                  <h6 class="ad-info text-uppercase mb-2">Address</h6>
+                  <p>California, USA</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-4 address-grid">
+              <div class="row address-info">
+                <div class="col-md-3 address-left text-center">
+                  <i class="far fa-envelope"></i>
+                </div>
+                <div class="col-md-9 address-right text-left">
+                  <h6 class="ad-info text-uppercase mb-2">Email</h6>
+                  <p>
+                    Email :
+                    <a href="#"> mail@example.com</a>
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-4 address-grid">
+              <div class="row address-info">
+                <div class="col-md-3 address-left text-center">
+                  <i class="fas fa-mobile-alt"></i>
+                </div>
+                <div class="col-md-9 address-right text-left">
+                  <h6 class="ad-info text-uppercase mb-2">Phone</h6>
+                  <p>+1 234 567 8901</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="container-fluid">
+          <div class="row">
+            
+            <div class="col-md-6 main_grid_contact">
+              <div class="form">
+                <h4 class="mb-4 text-left">Send us a message</h4>
+                
+                <form action="{% url 'website:contact' %}" method="post">
+                  {% csrf_token %}
+                  {% if request.user.is_authenticated %}
+
+                  <div class="form-group">
+                    <label class="my-2">Name</label>
+                    <input
+                      class="form-control"
+                      type="text"
+                      name="name"
+                      placeholder="{{request.user.username}}"
+                      required=""
+                      disabled
+                      value="{{request.user.username}}"
+
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label class="my-2">Email</label>
+                    <input
+                      class="form-control"
+                      type="email"
+                      name="email"
+                      placeholder="{{request.user.email}}"
+                      required=""
+                      disabled
+                      value="{{request.user.email}}"
+
+                    />
+                  </div>
+
+                  {% else %}
+
+                  <div class="form-group">
+                    <label class="my-2">Name</label>
+                    <input
+                      class="form-control"
+                      type="text"
+                      name="name"
+                      placeholder=""
+                      required=""
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label class="my-2">Email</label>
+                    <input
+                      class="form-control"
+                      type="email"
+                      name="email"
+                      placeholder=""
+                      required=""
+                    />
+                  </div>
+
+                  {% endif %}
+
+                  <div class="form-group">
+                    <label class="my-2">Subject</label>
+                    <input
+                      class="form-control"
+                      type="text"
+                      name="subject"
+                      placeholder=""
+                      required=""
+                    />
+                  <div class="form-group">
+                    <label class="my-2">Message</label>
+                    <textarea name="message" id="textarea" placeholder=""></textarea>
+                  </div>
+                  <div class="form-group">
+                    <label class="my-2">{{form.captcha}}</label>
+                  </div>
+                  <div class="input-group1">
+                    <input class="form-control" type="submit" value="Submit" />
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- //contact -->
+
+    {% endblock %}

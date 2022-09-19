@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head %}
+<title>About</title>
+{% endblock %}
+    
+
+{% block content %}  
+    <!-- /breadcrumb -->
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a href="{% url 'website:index' %}">Home</a>
+      </li>
+      <li class="breadcrumb-item active">About</li>
+    </ol>
+
+    <!-- //breadcrumb -->
+
+    <!-- ab -->
+    <section class="banner-bottom-w3layouts py-lg-5 py-md-5 py-3" id="feature">
+      <div class="container">
+        <div class="inner-sec-w3ls-agileits py-lg-5 py-3">
+          <h4 class="sub-tittle text-uppercase text-center">Some more info</h4>
+          <h3 class="tittle text-center">About Us</h3>
+
+          <div class="about-info mt-lg-5 mt-md-4 mt-4 text-center">
+            <img src="{% static 'images/1.jpg' %}" class="img-fluid" alt="" />
+            <p class="my-lg-5 my-3">
+              Lorem ipsum dolor sit amet Neque porro quisquam est qui dolorem
+              Lorem int ipsum dolor sit amet when an unknown printer took a
+              galley of type.Vivamus id tempor felis. Cras sagittis mi sit amet
+              malesuada mollis. Mauris porroinit consectetur cursus tortor vel
+              interdum.Simply dummy text of the printing and typesetting
+              industry. Lorem Ipsum has been the industry's standard dummy text
+              ever since the 1500s.Lorem ipsum dolor sit amet Neque porro
+              quisquam est qui dolorem Lorem int ipsum dolor sit amet.
+            </p>
+            
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- //ab -->
+    
+    {% include 'website/website-newsletter.html' %}
+
+{% endblock %}
+
+  

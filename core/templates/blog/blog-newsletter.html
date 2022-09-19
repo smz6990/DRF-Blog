@@ -1,0 +1,20 @@
+<div class="tech-btm">
+    <h4>Sign up to our newsletter</h4>
+    <p>Pellentesque dui, non felis. Maecenas male</p>
+    <form action="{% url 'website:newsletter' %}" method="post">
+      {% csrf_token %}
+      <input
+        class="form-control"
+        type="email"
+        placeholder="Email"
+        name="email"
+        required=""
+      />
+      <input type="hidden" name="next" value="{{request.path}}">
+      <input
+        class="form-control"
+        type="submit"
+        value="Subscribe"
+      />
+    </form>
+  </div>

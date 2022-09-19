@@ -1,0 +1,11 @@
+<div class="tech-btm">
+  <h4>Tags</h4>
+  {% for tag in post.tags.all %}    
+    <ul class="list-group single">
+      <li
+        class="list-group-item d-flex justify-content-between align-items-center">
+        <a style="color: #222222;" href="{% url 'blog:tag' tag_name=tag.name %}" >{{tag.name}}</a>
+      </li>
+    {% endfor %}
+    </ul>
+</div>

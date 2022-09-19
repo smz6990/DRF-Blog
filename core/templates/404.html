@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>404 page not found</title>
+{% endblock %}
+
+{% block content %}
+<!-- /breadcrumb -->
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">
+      <a href="{% url 'website:index' %}">Home</a>
+    </li>
+    <li class="breadcrumb-item active">404 page not found</li>
+  </ol>
+
+  <!-- //breadcrumb -->
+
+<!--Password Reset Complete-->
+<div class="center mt-5">
+<div class="row">
+  <div class="login px-4 mx-auto mw-100">
+    <h1 class="text-center mb-4">404 Page NOT Found</h1>
+    <hr>
+    <p>Sorry the address your are looking for not found.</p>
+    <a href="{% url 'website:index' %}" class="btn btn-primary submit mb-4">Go to home page</a>
+    <hr>
+    <br>
+  </div>
+</div>
+</div>
+
+{% endblock %}

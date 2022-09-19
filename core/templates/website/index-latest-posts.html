@@ -1,0 +1,14 @@
+<ul class="grid cs-style-5 row">
+    {% for post in posts %}
+        <li class="grid-info-img">
+        <figure>
+            <img src="{{post.image.url}}" class="img-fluid" alt="{{post.title}}" />
+            <figcaption>
+            <h3>{{post.title|truncatewords:5}}</h3>
+            <span>{{post.author.username}} </span>
+            <a href="{% url 'blog:single' pid=post.id %}">Read More</a>
+            </figcaption>
+        </figure>
+        </li>
+    {% endfor %}
+  </ul>

@@ -1,0 +1,23 @@
+{% load static %}
+<div class="single-gd tech-btm">
+    <h4>Last Published Post</h4>
+    <div class="blog-grids">
+      <div class="blog-grid-left">
+        <a href="{% url 'blog:single' pid=post.id %}">
+          <img
+            src="{{post.image.url}}"
+            class="img-fluid rounded"
+            alt="{{post.title}}"
+          />
+        </a>
+      </div>
+      <div class="blog-grid-right">
+        <h5>
+          <a href="{% url 'blog:single' pid=post.id %}"
+            >{{post.title|truncatewords:6}}</a
+          >
+        </h5>
+      </div>
+      <div class="clearfix"></div>
+    </div>
+  </div>

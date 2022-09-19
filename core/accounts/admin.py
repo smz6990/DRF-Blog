@@ -20,18 +20,24 @@ class CustomUserAdmin(UserAdmin):
     save_on_top = True
     fieldsets = (
         (None, {"fields": ("email", "password")}),
-        (
-            "Permissions",
+        ("Permissions",
             {
                 "fields": (
                     ("is_staff",
                     "is_active",
                     "is_superuser"),
+                )
+            },   
+        ),
+        ("Group permissions",
+            {
+                "fields": (
                     "groups",
                     "user_permissions",
                 )
             },
-        ),
+            ),
+        
         ("Important dates", {"fields": ("last_login",)}),
     )
     add_fieldsets = (

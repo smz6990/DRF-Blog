@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>403 Error</title>
+{% endblock %}
+
+{% block content %}
+<!-- /breadcrumb -->
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">
+      <a href="{% url 'website:index' %}">Home</a>
+    </li>
+    <li class="breadcrumb-item active">403 Error</li>
+  </ol>
+
+  <!-- //breadcrumb -->
+
+<!--Password Reset Complete-->
+<div class="center mt-5">
+<div class="row">
+  <div class="login px-4 mx-auto mw-100">
+    <h1 class="text-center mb-4">403</h1>
+    <h3>Forbidden</h3>
+    <hr>
+    <p>Access to this resource on the server is denied!</p>
+    <a href="{% url 'website:index' %}" class="btn btn-primary submit mb-4">Go to home page</a>
+    <hr>
+    <br>
+  </div>
+</div>
+</div>
+
+{% endblock %}

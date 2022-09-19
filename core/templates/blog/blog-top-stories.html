@@ -1,0 +1,31 @@
+{% load static %}
+{% load humanize %}
+<div class="tech-btm">
+  <h4>Top stories</h4>
+  {% for post in posts %}
+  <div class="blog-grids row mb-3">
+    <div class="col-md-5 blog-grid-left">
+      <a href="{% url 'blog:single' pid=post.id %}">
+        <img
+          src="{{post.image.url}}"
+          class="img-fluid rounded"
+          alt="{{post.title}}"
+        />
+      </a>
+    </div>
+    <div class="col-md-7 blog-grid-right">
+      <h5>
+        <a href="{% url 'blog:single' pid=post.id %}"
+          >{{post.title|truncatewords:6}}
+        </a>
+      </h5>
+      <div class="sub-meta">
+        <span> <i class="far fa-clock"></i> {{post.published_date|date:'d M, Y'}}</span>
+      </div>
+      <div class="sub-meta">
+        <span> <i class="far fa-clock"></i> {{post.published_date|naturaltime}}</span>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>

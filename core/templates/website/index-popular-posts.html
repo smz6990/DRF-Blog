@@ -1,0 +1,38 @@
+<div class="container-fluid">
+    <div class="row">
+
+    {% for post in posts %}
+      <div class="col-md-6 news-grid">
+        <article class="item news fadeIn">
+          <figure class="news-overlay">
+            <figcaption class="overlay">
+              <div class="like-share-wrapper">
+                <ul>
+                  <li>
+                    <div class="like-button-wrapper">
+                      <a href="{% url 'blog:single' pid=post.id %}" class="like_button"
+                        ><i class="far fa-heart"></i
+                      ></a>
+                      <span class="count">{{post.counted_views}}</span>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+              <div class="freebie-content">
+                <span class="date">{{post.published_date|date:'d/m/Y'}}</span>
+                <h4><a style="color:white;" href="{% url 'blog:single' pid=post.id %}">{{post.title|truncatewords:5}}</a></h4>
+                <div class="group log-in">
+                  <a class="hover-2 btn text-uppercase" href="{% url 'blog:single' pid=post.id %}"
+                    >Read More</a
+                  >
+                </div>
+              </div>
+            </figcaption>
+            <img src="{{post.image.url}}" class="img-fluid" alt="{{post.title}}" />
+          </figure>
+        </article>
+      </div>
+    {% endfor %}
+
+    </div>
+  </div>

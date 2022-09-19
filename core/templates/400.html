@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>400 Bad Request Error</title>
+{% endblock %}
+
+{% block content %}
+<!-- /breadcrumb -->
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">
+      <a href="{% url 'website:index' %}">Home</a>
+    </li>
+    <li class="breadcrumb-item active">400 Bad Request Error</li>
+  </ol>
+
+  <!-- //breadcrumb -->
+
+<div class="center mt-5">
+<div class="row">
+  <div class="login px-4 mx-auto mw-100">
+    <h1 class="text-center mb-4">400 Bad Request Error</h1>
+    <hr>
+    <p>This page isn't working right now.</p>
+    <p>Try to refresh this page or feel free to contact us if the problem persists</p>
+    <a href="{% url 'website:index' %}" class="btn btn-primary submit mb-4">Go to home page</a>
+    <hr>
+    <br>
+  </div>
+</div>
+</div>
+
+{% endblock %}

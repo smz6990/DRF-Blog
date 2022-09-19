@@ -1,0 +1,380 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="zxx">
+  <head>
+    {% block head %} {% endblock %}
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="utf-8" />
+    <meta name="keywords" content="Simple Blog Website" />
+    <script>
+      addEventListener(
+        "load",
+        function () {
+          setTimeout(hideURLbar, 0);
+        },
+        false
+      );
+
+      function hideURLbar() {
+        window.scrollTo(0, 1);
+      }
+    </script>
+    <link rel="shortcut icon" href="#">
+    <link
+      href="{% static 'css/bootstrap.css' %}"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link
+      rel="stylesheet"
+      href="{% static 'css/component.css' %}"
+      type="text/css"
+      media="all"
+    />
+    <link
+      href="{% static 'css/style.css' %}"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link href="{% static 'css/single.css' %}" rel="stylesheet" type="text/css" />
+    <link
+      rel="stylesheet"
+      href="{% static 'css/owl.theme.css' %}"
+      type="text/css"
+      media="all"
+    />
+    <link
+      href="{% static 'css/minimal-slider.css' %}"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link href="{% static 'css/fontawesome-all.css' %}" rel="stylesheet" />
+    <link
+      href="//fonts.googleapis.com/css?family=Josefin+Sans:100,100i,300,300i,400,400i,600,600i,700,700i"
+      rel="stylesheet"
+    />
+    <link
+      href="//fonts.googleapis.com/css?family=BenchNine:300,400,700"
+      rel="stylesheet"
+    />
+ 
+  </head>
+  <body>
+    <div class="mian-content">
+      <div class="header-top-w3layouts-agile">
+        <div class="top-head-wthree text-left">
+          <div class="row top-content-info">
+            <div class="col-lg-6 top-content-left">
+              <ul class="header-info-w3ls">
+                <li>
+                  <i class="far fa-envelope"></i>
+                  <a href="#">mail@example.com</a>
+                </li>
+                <li>
+                  <i class="fas fa-phone"></i>
+                  <a href="tel:+02223688199">+0222 3688 199</a>
+                </li>
+                <li><i class="far fa-clock"></i> Mon – Fri : 9:00 -17:00</li>
+              </ul>
+            </div>
+            <div class="col-lg-6 top-content-right">
+              <div class="land-gd">
+                <div class="hd-sc-one">
+                  <div class="land-image text-center">
+                    <i class="fas fa-map-signs"></i>
+                  </div>
+                  <div class="land-content">
+                    <h4>The Best Landscaping</h4>
+                  </div>
+                </div>
+              </div>
+              <div class="land-gd">
+                <div class="hd-sc-one">
+                  <div class="land-image text-center">
+                    <i class="fas fa-shield-alt"></i>
+                  </div>
+                  <div class="land-content">
+                    <h4>Certified Company</h4>
+                  </div>
+                  <div class="clearfix"></div>
+                </div>
+              </div>
+              <div class="clearfix"></div>
+            </div>
+          </div>
+        </div>
+
+        {% include 'messages.html' %}
+
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-3 top-social-icons text-center">
+              <ul class="social-icons">
+                <li class="mr-1">
+                  <a href="#"><span class="fab fa-facebook-f"></span></a>
+                </li>
+                <li class="mx-1">
+                  <a href="#"><span class="fab fa-twitter"></span></a>
+                </li>
+                <li class="mx-1">
+                  <a href="#"><span class="fab fa-google-plus-g"></span></a>
+                </li>
+                <li class="mx-1">
+                  <a href="#"><span class="fab fa-linkedin-in"></span></a>
+                </li>
+              </ul>
+            </div>
+            <div class="col-md-6 logo text-center">
+              <h1>
+                <a class="navbar-brand" href="{% url 'website:index' %}">
+                  <i class="fas fa-leaf"></i>Simple Blog Website</a
+                >
+              </h1>
+            </div>
+
+            {% if request.user.is_authenticated %}
+
+            <div class="col-md-3 login-right-img text-center">
+              <a
+                class="request text-uppercase"
+                href="#"
+                >{{request.user.username}}</a
+              >
+              <a
+                class="request text-uppercase"
+                href="{% url 'registration:signout' %}?next={{request.path}}"
+                >Sign Out</a
+              >
+            </div>
+
+            {% else %}
+            <div class="col-md-3 login-right-img text-center">
+              {% if next %}
+              <a
+                  class="request text-uppercase"
+                 href="{% url 'registration:signin' %}?next={{next}}"
+                 >Sign In</a
+                >
+              {% else %}
+                <a
+                  class="request text-uppercase"
+                 href="{% url 'registration:signin' %}?next={{request.path}}"
+                 >Sign In</a
+                >
+              {% endif %}
+                
+              {% if next %}
+               <a
+                   class="request text-uppercase"
+                   href="{% url 'registration:signup' %}?next={{next}}"
+                  >Sign Up</a
+                 >
+              {% else %}
+                <a
+                  class="request text-uppercase"
+                  href="{% url 'registration:signup' %}?next={{request.path}}"
+                 >Sign Up</a
+                >
+             {% endif %}
+            </div>
+            {% endif %}
+
+          </div>
+        </div>
+        <div class="header-bg">
+          <div class="container">
+            <header>
+              <nav class="navbar navbar-expand-lg navbar-light">
+                <button
+                  class="navbar-toggler navbar-toggler-right mx-auto"
+                  type="button"
+                  data-toggle="collapse"
+                  data-target="#navbarSupportedContent"
+                  aria-controls="navbarSupportedContent"
+                  aria-expanded="false"
+                  aria-label="Toggle navigation"
+                >
+                  <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div
+                  class="collapse navbar-collapse"
+                  id="navbarSupportedContent"
+                >
+                  <ul class="navbar-nav mr-lg-auto text-left">
+                    <li class="nav-item">
+                      <a class="nav-link" href="{% url 'website:index' %}"
+                        >Home
+                        <span class="sr-only">(current)</span>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="{% url 'website:about' %}">About</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="{% url 'blog:index' %}">Blog</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="{% url 'website:contact' %}">Contact</a>
+                    </li>
+                  </ul>
+                <form
+                    action="{% url 'blog:search' %}"
+                    method="get"
+                    class="form-inline my-2 my-lg-0 header-search"
+                  >
+                  <input
+                    class="form-control"
+                    type="search"
+                    placeholder="Search here..."
+                    name="Search"
+                    required=""
+                  />
+                  <button class="btn btn1 my-2 my-sm-0" type="submit">
+                    <i class="fas fa-search"></i>
+                  </button>
+                </form>
+                </div>
+              </nav>
+            </header>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- end of main image slider container -->
+    <div class="inner-page"></div>
+
+    {% block content %}
+    {% endblock %}
+
+      <!--footer -->
+      <footer class="footer-emp-wthree bg-dark dotts py-lg-5 py-3">
+        <div class="container">
+          <div class="row footer-top">
+            <div class="col-lg-4 footer-grid-w3ls">
+              <div class="footer-title">
+                <h3>About Us</h3>
+              </div>
+              <div class="footer-text">
+                <p>
+                  Curabitur non nulla sit amet nislinit tempus convallis quis ac
+                  lectus. lac inia eget consectetur sed, convallis at tellus.
+                  Nulla porttitor accumsana tincidunt.
+                </p>
+                <ul class="social-icons">
+                  <li class="mr-1">
+                    <a href="#"><span class="fab fa-facebook-f"></span></a>
+                  </li>
+                  <li class="mx-1">
+                    <a href="#"><span class="fab fa-twitter"></span></a>
+                  </li>
+                  <li class="mx-1">
+                    <a href="#"><span class="fab fa-google-plus-g"></span></a>
+                  </li>
+                  <li class="mx-1">
+                    <a href="#"><span class="fab fa-linkedin-in"></span></a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="col-lg-4 footer-grid-w3ls">
+              <div class="footer-title">
+                <h3>Get in touch</h3>
+              </div>
+              <div class="contact-info">
+                <h4>Location :</h4>
+                <p>0926k 4th block building, king Avenue, New York City.</p>
+                <div class="phone">
+                  <h4>Contact :</h4>
+                  <p>Phone : +121 098 8907 9987</p>
+                  <p>
+                    Email :
+                    <a href="#">info@example.com</a>
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-4 footer-grid-w3ls">
+              <div class="footer-title">
+                <h3>Quick Links</h3>
+              </div>
+              <ul class="links">
+                <li>
+                  <a href="{% url 'website:index' %}">Home</a>
+                </li>
+                <li>
+                  <a href="{% url 'website:about' %}">About</a>
+                </li>
+              </ul>
+              <ul class="links">
+                <li>
+                  <a href="{% url 'website:contact' %}">Contact</a>
+                </li>
+                <li>
+                  <a href="{% url 'blog:index' %}">Blog</a>
+                </li>
+              </ul>
+  
+              <div class="clearfix"></div>
+            </div>
+          </div>
+          <div class="copyright-w3 mt-4">
+            <p class="copy-right text-center">
+              &copy; 2018 Arable. All Rights Reserved | Design by
+              <a href="http://w3layouts.com/"> W3layouts </a>
+            </p>
+          </div>
+        </div>
+      </footer>
+      <!-- //footer -->
+      <!-- js -->
+      <script src="{% static 'js/jquery-2.2.3.min.js' %}"></script>
+      <script src="{% static 'js/toucheffects.js' %}"></script>
+      <script src="{% static 'js/modernizr.custom.js' %}"></script>
+      
+      <!-- stats -->
+      <script src="{% static 'js/jquery.waypoints.min.js' %}"></script>
+      <script src="{% static 'js/jquery.countup.js' %}"></script>
+      <script>
+        $(".counter").countUp();
+      </script>
+      <!-- //stats -->
+      <!--/ start-smoth-scrolling -->
+      <script src="{% static 'js/move-top.js' %}"></script>
+      <script src="{% static 'js/easing.js' %}"></script>
+      <script>
+        jQuery(document).ready(function ($) {
+          $(".scroll").click(function (event) {
+            event.preventDefault();
+            $("html,body").animate(
+              {
+                scrollTop: $(this.hash).offset().top,
+              },
+              900
+            );
+          });
+        });
+      </script>
+      <script>
+        $(document).ready(function () {
+          /*
+                                      var defaults = {
+                                            containerID: 'toTop', // fading element id
+                                          containerHoverID: 'toTopHover', // fading element hover id
+                                          scrollSpeed: 1200,
+                                          easingType: 'linear' 
+                                       };
+                                      */
+  
+          $().UItoTop({
+            easingType: "easeOutQuart",
+          });
+        });
+      </script>
+      <!--// end-smoth-scrolling -->
+      <!-- /js -->
+      <script src="{% static 'js/bootstrap.js' %}"></script>
+      <!-- //js -->
+    </body>
+  </html>
+  

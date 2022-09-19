@@ -1,0 +1,22 @@
+<!-- /newsletter-->
+<div class="newsletter py-lg-5 py-4 text-center">
+    <div class="newsletter-inner py-lg-5 py-4">
+      <h3 class="tittle text-center mb-lg-5 mb-3">Don't forget to Sign up</h3>
+      <div class="newsright">
+        <form action="{% url 'website:newsletter' %}" method="post" class="d-flex">
+          {% csrf_token %}
+          <input type="hidden" name="next" value="{{request.path}}">          
+          <input
+            class="form-control"
+            type="email"
+            placeholder=""
+            name="email"
+            required=""
+          />
+          <input class="form-control" type="submit" value="Subscribe" />
+          
+        </form>
+      </div>
+    </div>
+  </div>
+  <!-- //newsletter-->

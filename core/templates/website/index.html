@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load website_tags %}
+{% block head %}
+<title>Home</title>
+{% endblock %}
+
+
+  {% block content %}
+
+
+    <!-- banner-bottom-w3layouts -->
+    <div class="banner-bottom-w3layouts py-lg-5 py-3">
+      <div class="container">
+        <div class="inner-sec-w3ls-agileits py-lg-5 py-3">
+          <h4 class="sub-tittle text-uppercase text-center">What we do</h4>
+          <h3 class="tittle text-center mb-lg-5 mb-3">Latest Posts From Our Blog</h3>
+          
+          {% website_latest_posts %}
+
+        </div>
+      </div>
+    </div>
+    <!--// banner-bottom-w3layouts -->
+    <!-- /bottom-last -->
+    <section class="bottom-last">
+      <div class="bottom-bg py-5 bs-slider-overlay text-left">
+        <div class="container">
+          <h3 class="tittle text-left">TAKE A LOOK AT OUR BLOG</h3>
+          <p class="text-white mb-4">
+            Simply dummy text of the printing and typesetting industry. Lorem
+            Ipsum has been the industry's standard dummy text ever since the
+            1500s.Lorem ipsum dolor sit amet Neque porro quisquam est qui
+            dolorem Lorem int ipsum dolor sit amet.
+          </p>
+          <div class="log-in pb-md-5 pb-3">
+            <a class="hover-2 btn text-uppercase" href="{% url 'blog:index' %}"
+              >Blog</a
+            >
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- //bottom-last -->
+    <!-- /story -->
+    <section class="freebies bg-light pt-md-5 pt-3">
+      <div class="container freebies-intro pt-md-5">
+        <div class="row">
+          <div class="col-md-12">
+            <h4 class="sub-tittle text-uppercase">Our Events</h4>
+            <h3 class="tittle">Popular Posts</h3>
+          </div>
+        </div>
+        <div class="row mt-4 mt-3">
+          <div class="col-md-6 news-content-left">
+            <p>
+              Lorem ipsum dolor sit amet Neque porro quisquam est qui dolorem
+              Lorem int ipsum dolor sit amet when an unknown printer took a
+              galley of type.Vivamus id tempor felis. Cras sagittis mi sit amet
+              malesuada mollis. Mauris porroinit consectetur cursus tortor vel
+              interdum.
+            </p>
+          </div>
+          <div class="col-md-6 news-content-right">
+            <p>
+              Lorem ipsum dolor sit amet Neque porro quisquam est qui dolorem
+              Lorem int ipsum dolor sit amet when an unknown printer took a
+              galley of type.Vivamus id tempor felis. Cras sagittis mi sit amet
+              malesuada mollis. Mauris porroinit consectetur cursus tortor vel
+              interdum.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {% website_popular_posts %}
+
+    </section>
+    <!-- //story -->
+    {% include 'website/website-newsletter.html' %}
+
+    {% endblock %}
