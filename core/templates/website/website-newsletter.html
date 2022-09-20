@@ -4,8 +4,7 @@
       <h3 class="tittle text-center mb-lg-5 mb-3">Don't forget to Sign up</h3>
       <div class="newsright">
         <form action="{% url 'website:newsletter' %}" method="post" class="d-flex">
-          {% csrf_token %}
-          <input type="hidden" name="next" value="{{request.path}}">          
+          {% csrf_token %}          
           <input
             class="form-control"
             type="email"

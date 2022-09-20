@@ -137,12 +137,12 @@
             <div class="col-md-3 login-right-img text-center">
               <a
                 class="request text-uppercase"
-                href="#"
-                >{{request.user.username}}</a
+                href="{% url 'accounts:profile' pk=request.user.id %}"
+                >{{request.user.email}}</a
               >
               <a
                 class="request text-uppercase"
-                href="{% url 'registration:signout' %}?next={{request.path}}"
+                href="{% url 'accounts:logout' %}?next={{request.path}}"
                 >Sign Out</a
               >
             </div>
@@ -152,13 +152,13 @@
               {% if next %}
               <a
                   class="request text-uppercase"
-                 href="{% url 'registration:signin' %}?next={{next}}"
+                 href="{% url 'accounts:login' %}?next={{next}}"
                  >Sign In</a
                 >
               {% else %}
                 <a
                   class="request text-uppercase"
-                 href="{% url 'registration:signin' %}?next={{request.path}}"
+                 href="{% url 'accounts:login' %}?next={{request.path}}"
                  >Sign In</a
                 >
               {% endif %}
@@ -166,13 +166,13 @@
               {% if next %}
                <a
                    class="request text-uppercase"
-                   href="{% url 'registration:signup' %}?next={{next}}"
+                   href="{% url 'accounts:signup' %}?next={{next}}"
                   >Sign Up</a
                  >
               {% else %}
                 <a
                   class="request text-uppercase"
-                  href="{% url 'registration:signup' %}?next={{request.path}}"
+                  href="{% url 'accounts:signup' %}?next={{request.path}}"
                  >Sign Up</a
                 >
              {% endif %}

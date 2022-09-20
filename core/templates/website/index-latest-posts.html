@@ -5,8 +5,8 @@
             <img src="{{post.image.url}}" class="img-fluid" alt="{{post.title}}" />
             <figcaption>
             <h3>{{post.title|truncatewords:5}}</h3>
-            <span>{{post.author.username}} </span>
-            <a href="{% url 'blog:single' pid=post.id %}">Read More</a>
+            <span>{{post.author}} </span>
+            <a href="{% url 'blog:single' pk=post.id %}">Read More</a>
             </figcaption>
         </figure>
         </li>

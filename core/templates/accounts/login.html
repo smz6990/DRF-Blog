@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block head %}
-<title>Sign In</title>
+<title>LogIn</title>
 {% endblock %}
     
 
@@ -11,7 +11,7 @@
       <li class="breadcrumb-item">
         <a href="{% url 'website:index' %}">Home</a>
       </li>
-      <li class="breadcrumb-item active">Sign In</li>
+      <li class="breadcrumb-item active">LogIn</li>
     </ol>
 
     <!-- //breadcrumb -->
@@ -23,15 +23,15 @@
         <div class="login px-4 mx-auto mw-100">
             <h5 class="text-center mb-4">Login Now</h5>
             <hr>
-            <form action="{% url 'registration:signin' %}" method="post"> 
+            <form action="{% url 'accounts:login' %}" method="post"> 
                 {% csrf_token %}
                 <div class="form-group">
-                    <label class="mb-2">Username</label>
+                    <label class="mb-2">Email</label>
                     <input
                     type="text"
                     class="form-control"
                     name="username"
-                    placeholder="Username"
+                    placeholder="Email"
                     required=""
                     />
                 </div>
@@ -50,22 +50,20 @@
             </div>
             {% if next %}
                 <input type="hidden" name="next" value="{{next}}">
-            {% else %}
-                <input type="hidden" name="next" value="{{request.path}}">
             {% endif %}
             <button type="submit" class="btn btn-primary submit mb-4">
-            Sign In
+            Log In
             </button>
             <p class="text-center pb-4">
                 <a
-                    href="{% url 'registration:signup' %}"
+                    href="{% url 'accounts:signup' %}"
                 >
                 Don't have an account?</a
             >
             </p>
             <p class="text-center pb-4">
                 <a
-                    href="{% url 'registration:password_reset' %}"
+                    href="{% url 'accounts:password_reset' %}"
                 >
                 Forget your password? Click here to reset password</a
                 >
@@ -75,13 +73,4 @@
     </div>
 </div>
 <!--//Login-->
-
-
-
-
-
-
-
-
-
 {% endblock %}

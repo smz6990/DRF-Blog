@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load static %} 
+{% load blog_tags %} 
+{% load humanize %} 
+{% block head %}
+  <title>Edit post</title>
+{% endblock %} 
+{% block content %}
+<!-- /breadcrumb -->
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">
+    <a href="{% url 'website:index' %}">Home</a>
+  </li>
+  <li class="breadcrumb-item">
+    <a href="{% url 'blog:index' %}">Blog</a>
+  </li>
+  <li class="breadcrumb-item active">Edit Post</li>
+</ol>
+<!-- //breadcrumb -->
+<div class="col-md-6 main_grid_contact">
+  <div class="form">
+    <h4 class="mb-4 text-center">Edit post</h4>
+    <form method="post">
+      {% csrf_token %}
+       {% for element in form %}
+        {{ element.label }}: 
+        {% if element.label == 'Published date' %}
+          <input type="datetime-local" name="published_date">
+        {% elif element.label == 'Category' %}
+          <a href="{% url 'blog:category-create' %}" target="_blank">
+            Click here to create a new category
+          </a>
+          <br>
+          {{ element }}
+        {% else %}
+          {{ element }}
+        {% endif %}
+      <br />
+      <br />
+      {% endfor %}
+      <input type="submit" value="Update" />
+    </form>
+  </div>
+</div>
+
+{% endblock %}

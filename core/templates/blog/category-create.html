@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% load static %}  
+{% block head %}
+  <title>Create Category</title>
+{% endblock %} 
+{% block content %}
+<!-- /breadcrumb -->
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">
+    <a href="{% url 'website:index' %}">Home</a>
+  </li>
+  <li class="breadcrumb-item">
+    <a href="{% url 'blog:index' %}">Blog</a>
+  </li>
+  <li class="breadcrumb-item active">Create Category</li>
+</ol>
+<!-- //breadcrumb -->
+<div class="col-md-6 main_grid_contact">
+  <div class="form">
+    <h4 class="mb-4 text-center">Create a new Category</h4>
+    <form method="post">
+      {% csrf_token %}
+       {% for element in form %}
+        {{ element.label }}: 
+        {{ element }}
+      <hr>
+      <br />
+      {% endfor %}
+      <input type="submit" value="Create new Category" />
+    </form>
+  </div>
+</div>
+
+{% endblock %}

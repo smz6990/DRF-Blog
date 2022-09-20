@@ -8,6 +8,10 @@
         <a style="color: #222222;" href="{% url 'blog:category' cat_name=cat %}">{{cat}}</a>
         <span class="badge badge-primary badge-pill">{{count}}</span>
       </li>
+      {% empty %}
+      <li
+        class="list-group-item d-flex justify-content-between align-items-center"
+      >There is no Categories yet</li>
       {% endfor %}
     </ul>
   </div>

@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block head %} 
+    <title>Delete post</title>
+{% endblock %}
+
+{% block content %}
+    <!-- /breadcrumb -->
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a href="{% url 'website:index' %}">Home</a>
+      </li>
+      <li class="breadcrumb-item">
+        <a href="{% url 'blog:index' %}">Blog</a>
+      </li>
+      <li class="breadcrumb-item active">Delete Post</li>
+    </ol>
+    <!-- //breadcrumb -->
+    <div class="container justify-content-md-center">
+        <div class="mt-5 mb-4">
+          <form method="post">
+            {% csrf_token %}
+            <p>Are you sure you want to delete <b><i>"{{ object.title }}"</i></b> ?</p>
+            <input type="submit" class="btn btn-primary" value="Confirm" />
+          </form>
+        </div>
+      </div>
+{% endblock %}

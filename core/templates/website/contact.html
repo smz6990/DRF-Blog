@@ -70,21 +70,17 @@
                 
                 <form action="{% url 'website:contact' %}" method="post">
                   {% csrf_token %}
-                  {% if request.user.is_authenticated %}
-
                   <div class="form-group">
                     <label class="my-2">Name</label>
                     <input
                       class="form-control"
                       type="text"
                       name="name"
-                      placeholder="{{request.user.username}}"
+                      placeholder="Name"
                       required=""
-                      disabled
-                      value="{{request.user.username}}"
-
                     />
                   </div>
+                  {% if request.user.is_authenticated %}
                   <div class="form-group">
                     <label class="my-2">Email</label>
                     <input
@@ -93,7 +89,6 @@
                       name="email"
                       placeholder="{{request.user.email}}"
                       required=""
-                      disabled
                       value="{{request.user.email}}"
 
                     />
@@ -102,22 +97,12 @@
                   {% else %}
 
                   <div class="form-group">
-                    <label class="my-2">Name</label>
-                    <input
-                      class="form-control"
-                      type="text"
-                      name="name"
-                      placeholder=""
-                      required=""
-                    />
-                  </div>
-                  <div class="form-group">
                     <label class="my-2">Email</label>
                     <input
                       class="form-control"
                       type="email"
                       name="email"
-                      placeholder=""
+                      placeholder="Email"
                       required=""
                     />
                   </div>
@@ -130,12 +115,12 @@
                       class="form-control"
                       type="text"
                       name="subject"
-                      placeholder=""
+                      placeholder="Subject"
                       required=""
                     />
                   <div class="form-group">
                     <label class="my-2">Message</label>
-                    <textarea name="message" id="textarea" placeholder=""></textarea>
+                    <textarea name="message" id="textarea" placeholder="Your Message"></textarea>
                   </div>
                   <div class="form-group">
                     <label class="my-2">{{form.captcha}}</label>

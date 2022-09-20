@@ -5,7 +5,7 @@
   {% for post in posts %}
   <div class="blog-grids row mb-3">
     <div class="col-md-5 blog-grid-left">
-      <a href="{% url 'blog:single' pid=post.id %}">
+      <a href="{% url 'blog:single' pk=post.id %}">
         <img
           src="{{post.image.url}}"
           class="img-fluid rounded"
@@ -15,7 +15,7 @@
     </div>
     <div class="col-md-7 blog-grid-right">
       <h5>
-        <a href="{% url 'blog:single' pid=post.id %}"
+        <a href="{% url 'blog:single' pk=post.id %}"
           >{{post.title|truncatewords:6}}
         </a>
       </h5>
@@ -27,5 +27,7 @@
       </div>
     </div>
   </div>
+  {% empty %}
+  <h5>There is no Posts yet</h5>
   {% endfor %}
 </div>

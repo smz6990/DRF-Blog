@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 from decouple import config
+from django.contrib.messages import constants as messages
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -42,10 +43,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.humanize',
     
     'accounts.apps.AccountsConfig',
     'blog.apps.BlogConfig',
     'website.apps.WebsiteConfig',
+    
+    'simplemathcaptcha',
 ]
 
 MIDDLEWARE = [
@@ -114,7 +118,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Tehran'
 
 USE_I18N = True
 
@@ -145,7 +149,16 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 ###################### our apps ######################
 # config for custom user in accounts app
 AUTH_USER_MODEL = 'accounts.User'
-
+LOGIN_URL = 'accounts:login'
+LOGIN_REDIRECT_URL = '/'
+# message framework config
+MESSAGE_TAGS = {
+        messages.DEBUG: 'alert-secondary',
+        messages.INFO: 'alert-info',
+        messages.SUCCESS: 'alert-success',
+        messages.WARNING: 'alert-warning',
+        messages.ERROR: 'alert-danger',
+ }
 ######################################################
 ################## Third Party apps ##################
 

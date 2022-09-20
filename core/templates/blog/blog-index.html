@@ -29,16 +29,13 @@
                 <div class="about-in blog-grid-info text-left">
                   <div class="card img">
                     <div class="card-body img">
-                      <a href="{% url 'blog:single' pid=post.id %}">
+                      <a href="{% url 'blog:single' pk=post.id %}">
                       <img src="{{ post.image.url }}" alt="{{ post.title }}" class="img-fluid" /></a>
                       <div class="blog-des blogger">
                         <span class="entry-date">Published on : {{ post.published_date }} ({{post.published_date|naturaltime}})</span>
                         <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                        <span class="entry-date">Author : {{ post.author.username }}</span>
+                        <span class="entry-date">Author : {{ post.author }}</span>      
                         <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                        <span class="entry-date">{{ post.counted_views }} view{{post.counted_views|pluralize}}</span>
-                        <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                        
                         {% if post.category %}
                           <span class="entry-date">Categories : </span>
                           {% for cat in post.category.all %}
@@ -48,23 +45,15 @@
                             {% endif %}
                           {% endfor %}
                         {% endif %}
-
-                        <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-
-
-                        {% if post.tags %}
-                          <span class="entry-date">Tags : </span>
-                          {% for tag in post.tags.all %}
-                            <span class="entry-date"><a style="color: #222222;" href="{% url 'blog:tag' tag_name=tag.name %}">{{ tag.name }}</a></span>
-                            {% if not forloop.last %}
-                              <span class="entry-date">, </span>
-                            {% endif %}
-                          {% endfor %}
-                        {% endif %}
+                        {% if request.user.is_authenticated and post.author.user == request.user  %}
+                         <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                         <a class="btn btn-outline-dark" href="{% url 'blog:edit-post' pk=post.id %}" role="button">Edit post</a>
+                         <a class="btn btn-outline-dark" href="{% url 'blog:delete-post' pk=post.id %}" role="button">Delete post</a>
+                         {% endif %}
 
                         <hr>
                         <h5 class="card-title text-uppercase mt-2">
-                          <a href="{% url 'blog:single' pid=post.id %}"
+                          <a href="{% url 'blog:single' pk=post.id %}"
                             >{{ post.title }}
                           </a>
                         </h5>
@@ -74,7 +63,7 @@
                         <div class="log-in mt-md-3 mt-2">
                           <a
                             class="hover-2 btn text-uppercase"
-                            href="{% url 'blog:single' pid=post.id %}"
+                            href="{% url 'blog:single' pk=post.id %}"
                             >Read More</a
                           >
                         </div>
@@ -87,10 +76,16 @@
                 
                 <h5 class="card-title text-uppercase mt-2">
                   <a href="{% url 'website:index' %}"
-                    >Sorry ,No post yet ,Click here to go home page
+                    >Sorry ,No post yet ,Click here to go to home page
                   </a>
                 </h5>
-
+                  <h5 class="card-title text-uppercase mt-2">
+                    <a href="{% url 'blog:create-post' %}"
+                    >Or Click here to create a new Post
+                    </a>
+                  </h5>  
+                  <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                
                 {% endfor %}
               </div>
             </div>
@@ -100,6 +95,11 @@
             <aside class="col-lg-4 right-blog-con text-right">
               <div class="right-blog-info text-left">
                 
+                <a class="btn btn-outline-dark btn-block" href="{% url 'blog:create-post' %}" role="button">
+                  Create a new Post
+                </a>
+                <br>
+                <br>
                 {% include 'blog/blog-newsletter.html' %}
                 {% categories_tag %}
                 {% top_stories_tag %}
@@ -114,19 +114,19 @@
     </section>
     <!--/single-->
 
-    <!-- navbar-->
+    <!-- pagination-->
     <nav aria-label="..." class="mb-5">
       <ul class="pagination justify-content-center">
-        {% if posts.has_previous %}
-          <li class="page-item"><a class="page-link" style="color:#222222" href="?page={{ posts.previous_page_number }}">Previous</a></li>
+        {% if page_obj.has_previous %}
+          <li class="page-item"><a class="page-link" style="color:#222222" href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
         {% else %}
           <li class="page-item disabled">
             <span class="page-link">Previous</span>
           </li>
         {% endif %}
 
-        {% for i in posts.paginator.page_range %}
-          {% if posts.number == i %}
+        {% for i in page_obj.paginator.page_range %}
+          {% if page_obj.number == i %}
             <li class="page-item active" aria-current="page" >
               <span class="page-link" style="background-color: #ffc107; border: 1px solid #ffc107 ">{{ i }}</span>
             </li>
@@ -135,9 +135,9 @@
           {% endif %}
         {% endfor %}
 
-        {% if posts.has_next %}
+        {% if page_obj.has_next %}
           <li class="page-item">
-            <a class="page-link" style="color:#222222" href="?page={{ posts.next_page_number }}">Next</a>
+            <a class="page-link" style="color:#222222" href="?page={{ page_obj.next_page_number }}">Next</a>
           </li>
         {% else %}
           <li class="page-item disabled">
@@ -146,6 +146,6 @@
         {% endif %}
       </ul>
     </nav>
-    <!-- /navbar-->
+    <!-- /pagination-->
 
 {% endblock %}
