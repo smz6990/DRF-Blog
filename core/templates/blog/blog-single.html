@@ -65,11 +65,12 @@
 
               <div class="comment-top">
                 <h4>Comments</h4>
-                {% for comment in comments %}
+                {% for comment,image in data %}
                 <div class="media">
-                  <img src="{% static 'images/t1.jpg' %}" alt="" class="img-fluid rounded" />
+                  <img style="width:85px ; height:auto; " src="{{image.url}}" alt="{{comment.name}}" class="img-fluid rounded" />
                   <div class="media-body">
-                    <h5 class="mt-0">{{comment.name}}</h5>
+                    <h6 class="m-0">{{comment.name}}</h5>
+                    <h6 class="m-0">{{comment.email}}</h5>
                     <p>
                       {{comment.updated_date|naturaltime}}
                       <br>

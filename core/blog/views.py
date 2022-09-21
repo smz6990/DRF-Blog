@@ -38,7 +38,10 @@ class BlogSingleView(generic.DetailView):
             except Comment.DoesNotExist:
                 pass
             else:
-                context['comments'] = comments
+                data = []
+                for comment in comments:
+                    data.append((comment, Profile.objects.get(user__email=comment.email).image))
+                context['data'] = data
         return context
     
 class BlogCreatePostView(LoginRequiredMixin, generic.CreateView):
