@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'website.apps.WebsiteConfig',
     
     'simplemathcaptcha',
+    'debug_toolbar',
 ]
 
 MIDDLEWARE = [
@@ -162,4 +163,12 @@ MESSAGE_TAGS = {
 ######################################################
 ################## Third Party apps ##################
 
+# debug toolbar settings
+if DEBUG :
+    MIDDLEWARE.append("debug_toolbar.middleware.DebugToolbarMiddleware")
+    
+    import socket  # only if you haven't already imported this
+    hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
+    INTERNAL_IPS = [ip[: ip.rfind(".")] + ".1" for ip in ips] + ["127.0.0.1", "10.0.2.2"]
+    
 ######################################################

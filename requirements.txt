@@ -2,3 +2,4 @@ django>3.2,<3.3
 python-decouple
 Pillow
 django-simple-math-captcha==1.1.0
+django-debug-toolbar
