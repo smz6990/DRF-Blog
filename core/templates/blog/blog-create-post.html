@@ -22,6 +22,7 @@
     <h4 class="mb-4 text-center">Create a new post</h4>
     <form method="post">
       {% csrf_token %}
+      {{ form.media }}
        {% for element in form %}
         {{ element.label }}: 
         {% if element.label == 'Published date' %}

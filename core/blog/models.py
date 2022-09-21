@@ -1,6 +1,6 @@
 from django.db import models
 from django.urls import reverse
-
+from ckeditor_uploader.fields import RichTextUploadingField 
 from accounts.models import Profile
 
 
@@ -11,7 +11,7 @@ class Post(models.Model):
     """
     author = models.ForeignKey(Profile, on_delete=models.CASCADE)
     title = models.CharField(max_length=250)
-    content = models.TextField()
+    content = RichTextUploadingField()
     status = models.BooleanField(default=False)
     image = models.ImageField(null=True, blank=True,
         upload_to="blog/post_pics/", default="blog/post_pics/default.jpg"

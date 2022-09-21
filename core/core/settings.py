@@ -51,6 +51,8 @@ INSTALLED_APPS = [
     
     'simplemathcaptcha',
     'debug_toolbar',
+    'ckeditor',
+    'ckeditor_uploader',
 ]
 
 MIDDLEWARE = [
@@ -171,4 +173,7 @@ if DEBUG :
     hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
     INTERNAL_IPS = [ip[: ip.rfind(".")] + ".1" for ip in ips] + ["127.0.0.1", "10.0.2.2"]
     
+# ckeditor config
+CKEDITOR_BASEPATH = "/static/ckeditor/ckeditor/"
+CKEDITOR_UPLOAD_PATH = "ckeditor_uploads/"
 ######################################################

@@ -87,6 +87,7 @@
               <hr>
               <div class="comment-top">
                 <h4>Leave a Comment</h4>
+                {% if request.user.is_authenticated %}
                 <div class="comment-bottom">
                   <form action="{% url 'blog:comment' %}" method="post">
                     {% csrf_token %}
@@ -98,29 +99,18 @@
                       placeholder="Name"
                       required=""
                     />
-                    {% if request.user.is_authenticated %}
                     <input
                       class="form-control"
-                      type="email"
+                      type="hidden"
                       name="email"
                       placeholder="{{request.user.email}}"
                       required=""
                       value="{{request.user.email}}"
                     />
-                    {% else %}
-                    
-                    <input
-                      class="form-control"
-                      type="email"
-                      name="email"
-                      placeholder="Email"
-                      required=""
-                    />
-                    {% endif %}
                     <textarea
                       class="form-control"
                       name="message"
-                      placeholder="Message..."
+                      placeholder="Your Comment..."
                       required=""
                     ></textarea>
                     <button type="submit" class="btn btn-primary submit">
@@ -128,6 +118,9 @@
                     </button>
                   </form>
                 </div>
+                {% else %}
+                <h4>Please Login to comment</h4>
+                {% endif %}
               </div>
             </div>
 
@@ -139,11 +132,15 @@
                   Create a new Post
                 </a>
                 <br>
-                <br>
+                <hr>
                 {% include 'blog/blog-newsletter.html' %}
+                <hr>
                 {% categories_tag %}
+                <hr>
                 {% top_stories_tag %}
+                <hr>
                 {% recent_post_tag %}
+                <hr>
               </div>
             </aside>
             <!--//right-->

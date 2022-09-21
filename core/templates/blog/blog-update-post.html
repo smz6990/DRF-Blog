@@ -22,21 +22,27 @@
     <h4 class="mb-4 text-center">Edit post</h4>
     <form method="post">
       {% csrf_token %}
+      {{ form.media }}
        {% for element in form %}
-        {{ element.label }}: 
+        {{ element.label }}:
         {% if element.label == 'Published date' %}
-          <input type="datetime-local" name="published_date">
+          <input type="datetime-local" value="{{element.value|date:'c'}}" name="published_date">
         {% elif element.label == 'Category' %}
           <a href="{% url 'blog:category-create' %}" target="_blank">
             Click here to create a new category
           </a>
           <br>
           {{ element }}
+        {% elif element.label == 'Image' %}
+        <br>
+          <img src="{{element.value.url}}" alt="{{form.title.value}}">
+          <br>
+          {{element}}
         {% else %}
           {{ element }}
         {% endif %}
       <br />
-      <br />
+      <hr>
       {% endfor %}
       <input type="submit" value="Update" />
     </form>
