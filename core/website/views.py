@@ -33,7 +33,7 @@ class contactView(generic.CreateView):
         """If the form is invalid, render the invalid form."""
         messages.error(self.request, "Something went wrong.")
         messages.error(self.request, form.errors)
-        return self.render_to_response(self.get_context_data(form=form))
+        return super().form_invalid(form)
     
 class NewsletterView(generic.CreateView):
     """ only  accept POST """
@@ -52,5 +52,5 @@ class NewsletterView(generic.CreateView):
         """If the form is invalid, render the invalid form."""
         messages.error(self.request, "Something went wrong.")
         messages.error(self.request, form.errors)
-        return self.render_to_response(self.get_context_data(form=form))
+        return super().form_invalid(form)
     

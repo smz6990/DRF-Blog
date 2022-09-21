@@ -55,7 +55,7 @@ class BlogCreatePostView(LoginRequiredMixin, generic.CreateView):
         """If the form is invalid, render the invalid form."""
         messages.error(self.request, "Something went wrong.")
         messages.error(self.request, form.errors)
-        return self.render_to_response(self.get_context_data(form=form))
+        return super().form_invalid(form)
     
     def form_valid(self, form):
         """If the form is valid, save the associated model."""
@@ -98,7 +98,7 @@ class BlogEditPostView(LoginRequiredMixin, generic.UpdateView):
         """If the form is invalid, render the invalid form."""
         messages.error(self.request, "Something went wrong.")
         messages.error(self.request, form.errors)
-        return self.render_to_response(self.get_context_data(form=form))
+        return super().form_invalid(form)
     
     def form_valid(self, form):
         """If the form is valid, save the associated model."""
@@ -145,7 +145,7 @@ class BlogCommentCreateView(LoginRequiredMixin, generic.CreateView):
         """If the form is invalid, render the invalid form."""
         messages.error(self.request, "Something went wrong.")
         messages.error(self.request, form.errors)
-        return self.render_to_response(self.get_context_data(form=form))
+        return super().form_invalid(form)
     
     def form_valid(self, form):
         """If the form is valid, save the associated model."""
@@ -178,7 +178,7 @@ class CategoryCreateView(LoginRequiredMixin, generic.CreateView):
         """If the form is invalid, render the invalid form."""
         messages.error(self.request, "Something went wrong.")
         messages.error(self.request, form.errors)
-        return self.render_to_response(self.get_context_data(form=form))
+        return super().form_invalid(form)
     
     def form_valid(self, form):
         """If the form is valid, save the associated model."""
