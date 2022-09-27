@@ -16,7 +16,7 @@ class Post(models.Model):
     image = models.ImageField(null=True, blank=True,
         upload_to="blog/post_pics/", default="blog/post_pics/default.jpg"
     )
-    category = models.ManyToManyField("Category", null=True, blank=True)
+    category = models.ManyToManyField("Category", blank=True)
     published_date = models.DateTimeField()
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)

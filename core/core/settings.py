@@ -46,13 +46,14 @@ INSTALLED_APPS = [
     'django.contrib.humanize',
     
     'rest_framework',
+    'django_filters',
+    'drf_yasg',
     
     'accounts.apps.AccountsConfig',
     'blog.apps.BlogConfig',
     'website.apps.WebsiteConfig',
     
     'simplemathcaptcha',
-    'debug_toolbar',
     'ckeditor',
     'ckeditor_uploader',
 ]
@@ -169,6 +170,7 @@ MESSAGE_TAGS = {
 
 # debug toolbar settings
 if DEBUG :
+    INSTALLED_APPS.append('debug_toolbar')
     MIDDLEWARE.append("debug_toolbar.middleware.DebugToolbarMiddleware")
     
     import socket  # only if you haven't already imported this
@@ -178,4 +180,9 @@ if DEBUG :
 # ckeditor config
 CKEDITOR_BASEPATH = "/static/ckeditor/ckeditor/"
 CKEDITOR_UPLOAD_PATH = "ckeditor_uploads/"
+
+# django rest framework settings
+REST_FRAMEWORK = {
+    "DEFAULT_SCHEMA_CLASS": "rest_framework.schemas.coreapi.AutoSchema"
+}
 ######################################################

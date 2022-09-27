@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 
 from . import views
 
@@ -15,4 +15,6 @@ urlpatterns = [
     path('category/<str:cat_name>/',views.CategoryListView.as_view(),name='category'),
     path('category-create/',views.CategoryCreateView.as_view(),name='category-create'),
     path('search/',views.SearchView.as_view(),name='search'),
+    
+    path('api/v1/',include('blog.api.v1.urls')),
 ]

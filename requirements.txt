@@ -7,3 +7,5 @@ django-ckeditor
 djangorestframework
 markdown
 django-filter
+coreapi
+drf-yasg[validation]
