@@ -7,49 +7,63 @@ from django.urls import reverse
 from accounts.managers import CustomUserManager
 
 
-class User(AbstractBaseUser,PermissionsMixin):
+class User(AbstractBaseUser, PermissionsMixin):
     """
     Creating a class that represent the custom User model for
     authentication.
-    """    
-    email = models.EmailField(unique=True,max_length=255)
+    """
+
+    email = models.EmailField(unique=True, max_length=255)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     is_superuser = models.BooleanField(default=False)
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
-    USERNAME_FIELD = 'email'
+    USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
     objects = CustomUserManager()
-    
+
     def __str__(self):
         return self.email
-    
+
     def get_absolute_url(self):
         return reverse("accounts:profile", kwargs={"pk": self.id})
-    
+
+
 class Profile(models.Model):
     """
     This is a class that represent the profile for every account
     in our project.
     """
+
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    first_name = models.CharField(max_length=255, null=True, blank=True,)
-    last_name = models.CharField(max_length=255, null=True, blank=True,)
-    image = models.ImageField(null=True, blank=True,
-        upload_to='accounts/avatars/',
-        default='accounts/avatars/default.jpg')
+    first_name = models.CharField(
+        max_length=255,
+        null=True,
+        blank=True,
+    )
+    last_name = models.CharField(
+        max_length=255,
+        null=True,
+        blank=True,
+    )
+    image = models.ImageField(
+        null=True,
+        blank=True,
+        upload_to="accounts/avatars/",
+        default="accounts/avatars/default.jpg",
+    )
     description = models.TextField(null=True, blank=True)
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
-    
+
     def __str__(self):
         return self.user.email
-    
+
     def get_absolute_url(self):
         return reverse("accounts:profile", kwargs={"pk": self.user.id})
-    
-    
+
+
 @receiver(post_save, sender=User)
 def save_profile(sender, instance, created, **kwargs):
     """

@@ -1,6 +1,6 @@
 from django.db import models
 from django.urls import reverse
-from ckeditor_uploader.fields import RichTextUploadingField 
+from ckeditor_uploader.fields import RichTextUploadingField
 from accounts.models import Profile
 
 
@@ -9,12 +9,14 @@ class Post(models.Model):
     This is a table in our DB, Post is table name and below
     attributes are our field in our table.
     """
+
     author = models.ForeignKey(Profile, on_delete=models.CASCADE)
     title = models.CharField(max_length=250)
     content = RichTextUploadingField()
     status = models.BooleanField(default=False)
-    image = models.ImageField(null=True, blank=True,
-        upload_to="blog/post_pics/", default="blog/post_pics/default.jpg"
+    image = models.ImageField(
+        upload_to="blog/post_pics/",
+        default="blog/post_pics/default.jpg",
     )
     category = models.ManyToManyField("Category", blank=True)
     published_date = models.DateTimeField()
@@ -30,9 +32,13 @@ class Post(models.Model):
     def get_absolute_url(self):
         return reverse("blog:single", kwargs={"pk": self.id})
 
+    def get_snippet(self):
+        return self.content[:10]
+
 
 class Category(models.Model):
     """This is the Category table with name field in our database."""
+
     name = models.CharField(max_length=255)
 
     def __str__(self):
@@ -43,13 +49,14 @@ class Comment(models.Model):
     """
     Class that represent the comment section of each Post.
     """
+
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     name = models.CharField(max_length=255, null=True, blank=True)
     email = models.EmailField()
     message = models.TextField()
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
-    
+
     class Meta:
         ordering = ["-updated_date"]
 

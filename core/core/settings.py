@@ -169,7 +169,7 @@ MESSAGE_TAGS = {
 ################## Third Party apps ##################
 
 # debug toolbar settings
-if DEBUG :
+if DEBUG:
     INSTALLED_APPS.append('debug_toolbar')
     MIDDLEWARE.append("debug_toolbar.middleware.DebugToolbarMiddleware")
     
