@@ -6,11 +6,11 @@ from . import views
 app_name = "api-v1"
 
 urlpatterns = [
-    path("", views.BlogIndexListCreateAPIView.as_view(), name="index"),
+    path("", views.BlogIndexListCreateAPIView.as_view(), name="post-list"),
     path(
         "<int:pk>/",
         views.BlogSingleRetrieveUpdateDeleteAPIView.as_view(),
-        name="single",
+        name="post-single",
     ),
     path(
         "category/",

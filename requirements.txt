@@ -9,3 +9,5 @@ markdown
 django-filter
 coreapi
 drf-yasg[validation]
+djangorestframework-simplejwt==4.7.2
+djoser
