@@ -6,13 +6,18 @@ from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.views import TokenObtainPairView
+from django.contrib.auth import get_user_model
 
 from .serializers import (
     SignUpModelSerializer,
     CustomAuthTokenSerializer,
     CustomTokenObtainPairSerializer,
+    ChangePasswordSerializer,
 )
 from .permissions import NotAuthenticated
+
+
+User = get_user_model()
 
 
 class SignUpAPIView(generics.GenericAPIView):
@@ -80,3 +85,37 @@ class CustomTokenObtainPairView(TokenObtainPairView):
     """
 
     serializer_class = CustomTokenObtainPairSerializer
+
+
+class ChangePasswordUpdateAPIView(generics.UpdateAPIView):
+    """
+    View to change authenticated user's old_password with
+    the given new_password
+    """
+
+    serializer_class = ChangePasswordSerializer
+    http_method_names = ["put"]
+    permission_classes = [IsAuthenticated]
+    model = User
+
+    def get_object(self):
+        return self.request.user
+
+    def update(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        old_password = serializer.data.get("old_password")
+        if not self.object.check_password(old_password):
+            return Response(
+                {
+                    "old_password": [
+                        "Old password is wrong!",
+                    ]
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        self.object.set_password(serializer.data.get("new_password"))
+        self.object.save()
+        data = {"detail": "Password successfully changed."}
+        return Response(data, status=status.HTTP_204_NO_CONTENT)

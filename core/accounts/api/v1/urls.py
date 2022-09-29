@@ -28,6 +28,11 @@ urlpatterns = [
     ),
     path("jwt/refresh/", TokenRefreshView.as_view(), name="jwt-refresh"),
     path("jwt/verify/", TokenVerifyView.as_view(), name="jwt-verify"),
+    path(
+        "change-password/",
+        views.ChangePasswordUpdateAPIView.as_view(),
+        name="change-password",
+    ),
     # path(
     #     "profile/<int:pk>/",
     #     views.ProfileUpdateView.as_view(),
