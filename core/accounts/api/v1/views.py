@@ -5,8 +5,13 @@ from rest_framework.response import Response
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
+from rest_framework_simplejwt.views import TokenObtainPairView
 
-from .serializers import SignUpModelSerializer, CustomAuthTokenSerializer
+from .serializers import (
+    SignUpModelSerializer,
+    CustomAuthTokenSerializer,
+    CustomTokenObtainPairSerializer,
+)
 from .permissions import NotAuthenticated
 
 
@@ -48,7 +53,11 @@ class CustomObtainAuthToken(ObtainAuthToken):
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data["user"]
         token, created = Token.objects.get_or_create(user=user)
-        data = {"token": token.key, "email": user.email, "id": user.pk}
+        data = {
+            "token": token.key,
+            "email": user.email,
+            "user_id": user.pk,
+        }
         return Response(data)
 
 
@@ -62,3 +71,12 @@ class CustomLogOutDiscardToken(APIView):
     def post(self, request, *args, **kwargs):
         request.user.auth_token.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class CustomTokenObtainPairView(TokenObtainPairView):
+    """
+    Class to customize the TokenObtainPairView to return user email
+    and id to tokens.
+    """
+
+    serializer_class = CustomTokenObtainPairSerializer
