@@ -7,9 +7,15 @@ app_name = "api-v1"
 
 urlpatterns = [
     path(
-        "login/", views.CustomObtainAuthToken.as_view(), name="token-login"
+        "token/login/",
+        views.CustomObtainAuthToken.as_view(),
+        name="token-login",
     ),
-    # path("logout/", views.CustomLogoutView.as_view(), name="logout"),
+    path(
+        "token/logout/",
+        views.CustomLogOutDiscardToken.as_view(),
+        name="token-logout",
+    ),
     path("signup/", views.SignUpAPIView.as_view(), name="signup"),
     # path(
     #     "profile/<int:pk>/",
