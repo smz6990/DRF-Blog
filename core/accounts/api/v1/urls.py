@@ -33,11 +33,11 @@ urlpatterns = [
         views.ChangePasswordUpdateAPIView.as_view(),
         name="change-password",
     ),
-    # path(
-    #     "profile/<int:pk>/",
-    #     views.ProfileUpdateView.as_view(),
-    #     name="profile",
-    # ),
+    path(
+        "profile/",
+        views.ProfileRetrieveUpdateAPIView.as_view(),
+        name="profile",
+    ),
     # path(
     #     "password_reset/",
     #     views.password_reset_request_view,

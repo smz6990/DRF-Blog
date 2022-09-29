@@ -5,7 +5,12 @@ from django.contrib.auth import authenticate
 from django.utils.translation import gettext_lazy as _
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
-from ...models import User
+from django.contrib.auth import get_user_model
+
+from ...models import Profile
+
+
+User = get_user_model()
 
 
 class SignUpModelSerializer(serializers.ModelSerializer):
@@ -109,3 +114,22 @@ class ChangePasswordSerializer(serializers.Serializer):
             raise serializers.ValidationError({"New password": list(e)})
 
         return super().validate(attrs)
+
+
+class ProfileSerializer(serializers.ModelSerializer):
+    """
+    Serializer for Profile Model
+    """
+
+    email = serializers.ReadOnlyField(source="user.email")
+
+    class Meta:
+        model = Profile
+        fields = [
+            "id",
+            "email",
+            "first_name",
+            "last_name",
+            "image",
+            "description",
+        ]
