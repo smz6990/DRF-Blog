@@ -3,6 +3,7 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.urls import reverse
+from rest_framework.authtoken.models import Token
 
 from accounts.managers import CustomUserManager
 
@@ -65,9 +66,10 @@ class Profile(models.Model):
 
 
 @receiver(post_save, sender=User)
-def save_profile(sender, instance, created, **kwargs):
+def save_profile_create_token(sender, instance, created, **kwargs):
     """
     A signal that create Profile for user when signing up
     """
     if created:
         Profile.objects.create(user=instance)
+        Token.objects.create(user=instance)

@@ -1,4 +1,5 @@
 from django.urls import path
+from rest_framework.authtoken.views import ObtainAuthToken
 
 from . import views
 
@@ -6,7 +7,7 @@ from . import views
 app_name = "api-v1"
 
 urlpatterns = [
-    # path("login/", views.CustomLoginView.as_view(), name="login"),
+    path("login/", ObtainAuthToken.as_view(), name="token-login"),
     # path("logout/", views.CustomLogoutView.as_view(), name="logout"),
     path("signup/", views.SignUpAPIView.as_view(), name="signup"),
     # path(
