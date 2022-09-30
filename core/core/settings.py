@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     "simplemathcaptcha",
     "ckeditor",
     "ckeditor_uploader",
+    "mail_templated",
 ]
 
 MIDDLEWARE = [

@@ -6,18 +6,25 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('blog', '0003_alter_comment_name'),
+        ("blog", "0003_alter_comment_name"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='post',
-            name='category',
-            field=models.ManyToManyField(blank=True, null=True, to='blog.Category'),
+            model_name="post",
+            name="category",
+            field=models.ManyToManyField(
+                blank=True, null=True, to="blog.Category"
+            ),
         ),
         migrations.AlterField(
-            model_name='post',
-            name='image',
-            field=models.ImageField(blank=True, default='blog/post_pics/default.jpg', null=True, upload_to='blog/post_pics/'),
+            model_name="post",
+            name="image",
+            field=models.ImageField(
+                blank=True,
+                default="blog/post_pics/default.jpg",
+                null=True,
+                upload_to="blog/post_pics/",
+            ),
         ),
     ]

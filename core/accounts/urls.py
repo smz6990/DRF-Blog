@@ -8,6 +8,7 @@ app_name = "accounts"
 urlpatterns = [
     path("api/v1/", include("accounts.api.v1.urls")),
     path("api/v2/", include("djoser.urls")),
+    path("api/v2/", include("djoser.urls.jwt")),
     path("login/", views.CustomLoginView.as_view(), name="login"),
     path("logout/", views.CustomLogoutView.as_view(), name="logout"),
     path("signup/", views.CustomSignUpView.as_view(), name="signup"),

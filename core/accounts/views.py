@@ -116,9 +116,7 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
     def form_valid(self, form):
         """If the form is valid, save the associated model."""
         form.instance.user = self.request.user
-        messages.success(
-            self.request, "Your Profile updated successfully."
-        )
+        messages.success(self.request, "Your Profile updated successfully.")
         return super().form_valid(form)
 
 

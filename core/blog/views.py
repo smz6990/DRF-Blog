@@ -217,9 +217,7 @@ class CategoryCreateView(LoginRequiredMixin, generic.CreateView):
 
     def form_valid(self, form):
         """If the form is valid, save the associated model."""
-        messages.success(
-            self.request, "New Category created successfully."
-        )
+        messages.success(self.request, "New Category created successfully.")
         return super().form_valid(form)
 
 
