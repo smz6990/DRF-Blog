@@ -8,6 +8,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.views import TokenObtainPairView
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
+from django.contrib.auth import update_session_auth_hash
 
 from .serializers import (
     SignUpModelSerializer,
@@ -120,6 +121,7 @@ class ChangePasswordUpdateAPIView(generics.UpdateAPIView):
             )
         self.object.set_password(serializer.data.get("new_password"))
         self.object.save()
+        update_session_auth_hash(request, self.object)
         data = {"detail": "Password successfully changed."}
         return Response(data, status=status.HTTP_204_NO_CONTENT)
 

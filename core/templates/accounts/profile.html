@@ -14,7 +14,9 @@
 <div class="col-md-6 main_grid_contact">
   <div class="form">
     <h4 class="mb-4 text-left">Hello, {{request.user}}</h4>
-    <img width="100px" height="100px" src="{{profile.image.url}}" alt="{{profile.user}}">
+    {% if profile.image %}
+      <img width="100px" height="100px" src="{{profile.image.url}}" alt="{{profile.user}}">
+    {% endif %}
     <br>
     <hr>
     <form method="post">
@@ -25,8 +27,11 @@
         <br>
         <hr>
       {% endfor %}
-      <input type="submit" value="Save" />
+      <input type="submit" value="Save" class="btn btn-primary submit mb-4"/>
     </form>
+    <h6>
+      <a href="{% url 'accounts:change-password' %}" >Change Password</a>
+    </h6>
   </div>
 </div>
 

@@ -5,12 +5,14 @@ from django.views.generic import CreateView, UpdateView
 from django.contrib.auth import authenticate, login
 from django.urls import reverse
 from django.http import HttpResponseRedirect
+from django.contrib.auth import update_session_auth_hash
 
 from .models import Profile
 from .forms import (
     CustomUserCreationForm,
     ProfileFrom,
     CustomAuthenticationForm,
+    CustomPasswordChangeForm,
 )
 
 
@@ -122,3 +124,30 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
 
 def password_reset_request_view(request):
     pass
+
+
+class CustomChangePasswordView(views.PasswordChangeView):
+    """
+    Customizing the ChangePasswordView
+    """
+
+    form_class = CustomPasswordChangeForm
+    success_url = "/"
+    template_name = "accounts/change-password.html"
+
+    def form_valid(self, form):
+        form.save()
+        # Updating the password logs out all other sessions for the user
+        # except the current one.
+        messages.success(self.request, "Your password change successfully")
+        update_session_auth_hash(self.request, form.user)
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        messages.error(self.request, "Something went wrong!")
+        messages.error(self.request, form.errors)
+        return super().form_invalid(form)
+
+    def get_success_url(self):
+        pk = self.request.user.id
+        return reverse("accounts:profile", kwargs={"pk": pk})
