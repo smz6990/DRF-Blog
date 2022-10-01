@@ -18,6 +18,9 @@
     <div class="login px-4 mx-auto mw-100">
       <h5 class="text-center mb-4">Enter Your Email</h5>
       <hr>
+      <p>
+        Enter your email address below, and we'll email instructions for verify your account .
+      </p>
       <form method="post">
         {% csrf_token %}
         <div class="form-group">
@@ -31,7 +34,7 @@
           />
         </div>
         <button type="submit" class="btn btn-primary submit mb-4">
-          Send
+          Send Email
         </button>
       </form>
     </div>
