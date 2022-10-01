@@ -2,11 +2,14 @@ from django.contrib.auth import views
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import CreateView, UpdateView
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate
 from django.urls import reverse
 from django.http import HttpResponseRedirect
 from django.contrib.auth import update_session_auth_hash
+from mail_templated import EmailMessage
+from rest_framework_simplejwt.tokens import AccessToken
 
+from .permissions import UserIsVerifiedMixin
 from .models import Profile
 from .forms import (
     CustomUserCreationForm,
@@ -14,6 +17,7 @@ from .forms import (
     CustomAuthenticationForm,
     CustomPasswordChangeForm,
 )
+from .utils import EmailThreadSend
 
 
 class CustomLoginView(views.LoginView):
@@ -53,14 +57,30 @@ class CustomSignUpView(CreateView):
     template_name = "accounts/signup.html"
 
     def form_valid(self, form):
-        """If the form is valid, save the associated model."""
+        """
+        If the form is valid, save the associated model,
+        and send verification email.
+        """
         self.object = form.save()
         valid = super(CustomSignUpView, self).form_valid(form)
         email = self.request.POST["email"]
         password = self.request.POST["password1"]
         user = authenticate(self.request, email=email, password=password)
-        login(self.request, user)
-        messages.success(self.request, "You account successfully created.")
+        token = str(AccessToken.for_user(user))
+        message = EmailMessage(
+            "email/email-verification.tpl",
+            {"token": token, "user": user},
+            "info@test.com",
+            to=[email],
+        )
+        EmailThreadSend(message).start()
+
+        messages.success(
+            self.request, "Your account successfully created."
+        )
+        messages.success(
+            self.request, "Verification email is send to your email."
+        )
         return valid
 
     def form_invalid(self, form):
@@ -70,7 +90,9 @@ class CustomSignUpView(CreateView):
         return super().form_invalid(form)
 
 
-class ProfileUpdateView(LoginRequiredMixin, UpdateView):
+class ProfileUpdateView(
+    LoginRequiredMixin, UserIsVerifiedMixin, UpdateView
+):
     """
     Class to update Profile of a user
     """
@@ -116,15 +138,19 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
     def form_valid(self, form):
         """If the form is valid, save the associated model."""
         form.instance.user = self.request.user
-        messages.success(self.request, "Your Profile updated successfully.")
+        messages.success(
+            self.request, "Your Profile updated successfully."
+        )
         return super().form_valid(form)
 
+    def get_success_url(self):
+        pk = self.request.user.id
+        return reverse("accounts:profile", kwargs={"pk": pk})
 
-def password_reset_request_view(request):
-    pass
 
-
-class CustomChangePasswordView(views.PasswordChangeView):
+class CustomChangePasswordView(
+    LoginRequiredMixin, UserIsVerifiedMixin, views.PasswordChangeView
+):
     """
     Customizing the ChangePasswordView
     """
@@ -149,3 +175,7 @@ class CustomChangePasswordView(views.PasswordChangeView):
     def get_success_url(self):
         pk = self.request.user.id
         return reverse("accounts:profile", kwargs={"pk": pk})
+
+
+def password_reset_request_view(request):
+    pass

@@ -22,13 +22,13 @@ urlpatterns = [
         views.CustomChangePasswordView.as_view(),
         name="change-password",
     ),
+    # email verification url and view
+    # email resend verification url and view
     path(
         "password_reset",
         views.password_reset_request_view,
         name="password_reset",
     )
-    # accounts/password_change/ [name='password_change']
-    # accounts/password_change/done/ [name='password_change_done']
     # path('password_reset/done/',
     #     auth_views.PasswordResetDoneView.as_view(template_name='registration/password_reset_done.html'),
     #     name='password_reset_done'),

@@ -38,4 +38,6 @@ class IsVerifyOrReadOnly(permissions.BasePermission):
         if request.method in permissions.SAFE_METHODS:
             return True
 
-        return request.user.is_authenticated and request.user.is_verify
+        if request.user.is_authenticated:
+            return request.user.is_verify
+        return False
