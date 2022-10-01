@@ -13,6 +13,10 @@ from mail_templated import EmailMessage
 from rest_framework_simplejwt.tokens import AccessToken
 import jwt
 from django.conf import settings
+from django.views.decorators.cache import never_cache
+from django.views.decorators.csrf import csrf_protect
+from django.views.decorators.debug import sensitive_post_parameters
+from django.utils.decorators import method_decorator
 
 from .serializers import (
     SignUpModelSerializer,
@@ -74,6 +78,12 @@ class CustomObtainAuthToken(ObtainAuthToken):
     serializer_class = CustomAuthTokenSerializer
     permission_classes = [NotAuthenticated]
 
+    @method_decorator(sensitive_post_parameters())
+    @method_decorator(csrf_protect)
+    @method_decorator(never_cache)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(
             data=request.data, context={"request": request}
@@ -120,6 +130,11 @@ class ChangePasswordUpdateAPIView(generics.UpdateAPIView):
     http_method_names = ["put"]
     permission_classes = [IsAuthenticated, IsVerifyOrReadOnly]
     model = User
+
+    @method_decorator(sensitive_post_parameters())
+    @method_decorator(csrf_protect)
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
 
     def get_object(self):
         return self.request.user
@@ -226,6 +241,10 @@ class ResetPasswordGenericAPIView(generics.GenericAPIView):
 
     serializer_class = ResetPasswordSerializer
 
+    @method_decorator(csrf_protect)
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
+
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -248,6 +267,11 @@ class PasswordResetDoneGenericAPIView(generics.GenericAPIView):
     """
 
     serializer_class = PasswordResetDoneSerializer
+
+    @method_decorator(sensitive_post_parameters())
+    @method_decorator(never_cache)
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
 
     def put(self, request, *args, **kwargs):
         token = kwargs.get("token")

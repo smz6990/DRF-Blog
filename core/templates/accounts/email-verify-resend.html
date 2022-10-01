@@ -1,0 +1,43 @@
+{% extends 'base.html' %} {% block head %}
+<title>Resend Verification Email</title>
+{% endblock %} {% block content %}
+<!-- /breadcrumb -->
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">
+    <a href="{% url 'website:index' %}">Home</a>
+  </li>
+  <li class="breadcrumb-item active">Resend Verification Email</li>
+</ol>
+
+<!-- //breadcrumb -->
+
+<!--/Verification Email-->
+
+<div class="center mt-5">
+  <div class="form-group row">
+    <div class="login px-4 mx-auto mw-100">
+      <h5 class="text-center mb-4">Enter Your Email</h5>
+      <hr>
+      <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+          <label>Email</label>
+          <input
+            type="email"
+            class="form-control"
+            placeholder="Email"
+            required=""
+            name="email"
+          />
+        </div>
+        <button type="submit" class="btn btn-primary submit mb-4">
+          Send
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!--//Verification Email-->
+
+{% endblock %}

@@ -3,7 +3,7 @@ from django.contrib import messages
 
 
 class UserIsVerifiedMixin(AccessMixin):
-    """Verify that the current user is verified."""
+    """Access the current user if user is verified."""
 
     def dispatch(self, request, *args, **kwargs):
         if not request.user.is_verify:

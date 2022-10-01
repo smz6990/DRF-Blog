@@ -22,6 +22,16 @@ urlpatterns = [
         views.CustomChangePasswordView.as_view(),
         name="change-password",
     ),
+    path(
+        "verify-email/<str:token>/",
+        views.VerifyEmailView.as_view(),
+        name="verify-email",
+    ),
+    path(
+        "resend-verify-email/",
+        views.ResendVerifyEmailView.as_view(),
+        name="resend-verify-email",
+    ),
     # email verification url and view
     # email resend verification url and view
     path(

@@ -68,3 +68,11 @@ class CustomPasswordChangeForm(PasswordChangeForm):
             "new_password2",
             "captcha",
         ]
+
+
+class ResendVerifyEmailForm(forms.Form):
+    """
+    Form to get email to send verification email.
+    """
+
+    email = forms.EmailField()

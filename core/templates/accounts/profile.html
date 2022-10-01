@@ -14,6 +14,7 @@
 <div class="col-md-6 main_grid_contact">
   <div class="form">
     <h4 class="mb-4 text-left">Hello, {{request.user}}</h4>
+    {% if request.user.is_verify %}
     {% if profile.image %}
       <img width="100px" height="100px" src="{{profile.image.url}}" alt="{{profile.user}}">
     {% endif %}
@@ -32,6 +33,13 @@
     <h6>
       <a href="{% url 'accounts:change-password' %}" >Change Password</a>
     </h6>
+    {% else %}
+    <h6>
+      Please
+      <a href="{% url 'accounts:resend-verify-email' %}" >verify</a>
+      your accounts to get full access to site.
+    </h6>
+    {% endif %}
   </div>
 </div>
 

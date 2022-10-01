@@ -1,21 +1,25 @@
 from django.contrib.auth import views
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import CreateView, UpdateView
+from django.views.generic import CreateView, UpdateView, View, FormView
 from django.contrib.auth import authenticate
 from django.urls import reverse
 from django.http import HttpResponseRedirect
+from django.shortcuts import redirect
 from django.contrib.auth import update_session_auth_hash
 from mail_templated import EmailMessage
 from rest_framework_simplejwt.tokens import AccessToken
+import jwt
+from django.conf import settings
 
 from .permissions import UserIsVerifiedMixin
-from .models import Profile
+from .models import Profile, User
 from .forms import (
     CustomUserCreationForm,
     ProfileFrom,
     CustomAuthenticationForm,
     CustomPasswordChangeForm,
+    ResendVerifyEmailForm,
 )
 from .utils import EmailThreadSend
 
@@ -90,9 +94,7 @@ class CustomSignUpView(CreateView):
         return super().form_invalid(form)
 
 
-class ProfileUpdateView(
-    LoginRequiredMixin, UserIsVerifiedMixin, UpdateView
-):
+class ProfileUpdateView(LoginRequiredMixin, UpdateView):
     """
     Class to update Profile of a user
     """
@@ -175,6 +177,82 @@ class CustomChangePasswordView(
     def get_success_url(self):
         pk = self.request.user.id
         return reverse("accounts:profile", kwargs={"pk": pk})
+
+
+class VerifyEmailView(View):
+    """
+    View to verify user by given email
+    """
+
+    def get(self, request, *args, **kwargs):
+        token = kwargs.get("token")
+        try:
+            payload = jwt.decode(
+                jwt=token, key=settings.SECRET_KEY, algorithms=["HS256"]
+            )
+            user = User.objects.get(id=payload["user_id"])
+            if not user.is_verify:
+                user.is_verify = True
+                user.save()
+                messages.success(request, "Your email is verified!")
+                return redirect(
+                    reverse("accounts:profile", kwargs={"pk": user.id})
+                )
+            else:
+                messages.info(
+                    request, "Your email has already been verified!"
+                )
+                return redirect(
+                    reverse("accounts:profile", kwargs={"pk": user.id})
+                )
+        except jwt.ExpiredSignatureError:
+            messages.error(request, "Activations link expired")
+            return redirect(reverse("accounts:resend-verify-email"))
+        except jwt.exceptions.DecodeError:
+            messages.error(request, "Invalid Token")
+            return redirect(reverse("accounts:resend-verify-email"))
+
+
+class ResendVerifyEmailView(FormView):
+    """
+    View to resend verification email
+    """
+
+    form_class = ResendVerifyEmailForm
+    template_name = "accounts/email-verify-resend.html"
+
+    def form_valid(self, form):
+        email = form.cleaned_data.get("email")
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            messages.error(
+                self.request, "User with the given email does not exist!"
+            )
+            return redirect(reverse("/"))
+        if user.is_verify:
+            messages.info(
+                self.request, "Your account has been already verified!"
+            )
+            return redirect(
+                reverse("accounts:profile", kwargs={"pk": user.id})
+            )
+        token = str(AccessToken.for_user(user))
+        message = EmailMessage(
+            "email/email-verification.tpl",
+            {"token": token, "user": user},
+            "info@test.com",
+            to=[email],
+        )
+        EmailThreadSend(message).start()
+        messages.success(
+            self.request, "Verification email is sent to you!"
+        )
+        return redirect("/")
+
+    def form_invalid(self, form):
+        messages.error(self.request, form.errors)
+        return super().form_invalid(form)
 
 
 def password_reset_request_view(request):
