@@ -9,10 +9,7 @@ class TestNewsletterModel:
         data = {"email": "test@test.com"}
         model_obj = Newsletter.objects.create(**data)
         model_obj.save()
-        assert (
-            Newsletter.objects.filter(email=model_obj.email).exists()
-            is True
-        )
+        assert Newsletter.objects.filter(email="test@test.com").exists()
         assert model_obj.email == data["email"]
 
 
@@ -28,4 +25,8 @@ class TestContactModel:
         contact_obj = Contact.objects.create(**data)
         contact_obj.save()
         assert Contact.objects.count() == 1
+        assert Contact.objects.filter(name="test").exists()
         assert contact_obj.name == "test"
+        assert contact_obj.email == "test@test.com"
+        assert contact_obj.subject == "test subject"
+        assert contact_obj.message == "test message"
