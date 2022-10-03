@@ -34,7 +34,6 @@ class TestNewsletterForm:
         )
 
 
-@pytest.mark.django_db
 class TestContactForm:
     def test_contact_form_valid_data(self):
         data = {

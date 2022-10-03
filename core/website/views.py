@@ -21,7 +21,7 @@ class AboutView(generic.TemplateView):
     template_name = "website/about.html"
 
 
-class contactView(generic.CreateView):
+class ContactView(generic.CreateView):
     """
     Class that rendering the contact page
     """
