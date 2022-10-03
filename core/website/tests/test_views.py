@@ -9,7 +9,7 @@ def basic_user_client():
 
 
 @pytest.mark.django_db
-class TestWebsiteView:
+class TestWebsiteViews:
     def test_index_view_get_response_200(self, basic_user_client):
         url = reverse("website:index")
         response = basic_user_client.get(url)

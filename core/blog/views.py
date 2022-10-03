@@ -8,6 +8,7 @@ from django.utils import timezone
 from accounts.models import Profile
 from .models import Post, Comment
 from .forms import CategoryForm, PostForm, CommentForm
+from .permissions import UserIsVerifiedMixin
 
 
 class BlogIndexView(generic.ListView):
@@ -55,7 +56,9 @@ class BlogSingleView(generic.DetailView):
         return context
 
 
-class BlogCreatePostView(LoginRequiredMixin, generic.CreateView):
+class BlogCreatePostView(
+    LoginRequiredMixin, UserIsVerifiedMixin, generic.CreateView
+):
     """
     Class to create a new Post in blog app by logged in user
     """
@@ -81,9 +84,11 @@ class BlogCreatePostView(LoginRequiredMixin, generic.CreateView):
         return super().form_valid(form)
 
 
-class BlogEditPostView(LoginRequiredMixin, generic.UpdateView):
+class BlogEditPostView(
+    LoginRequiredMixin, UserIsVerifiedMixin, generic.UpdateView
+):
     """
-    Class to update the existing post by the creator of post
+    Class to update the existing post by the owner of post
     """
 
     form_class = PostForm
@@ -126,7 +131,9 @@ class BlogEditPostView(LoginRequiredMixin, generic.UpdateView):
         return super().form_valid(form)
 
 
-class BlogDeletePostView(LoginRequiredMixin, generic.DeleteView):
+class BlogDeletePostView(
+    LoginRequiredMixin, UserIsVerifiedMixin, generic.DeleteView
+):
     """
     Class to delete an existing post by its owner
     """
@@ -160,7 +167,9 @@ class BlogDeletePostView(LoginRequiredMixin, generic.DeleteView):
         return super().post(request, *args, **kwargs)
 
 
-class BlogCommentCreateView(LoginRequiredMixin, generic.CreateView):
+class BlogCommentCreateView(
+    LoginRequiredMixin, UserIsVerifiedMixin, generic.CreateView
+):
     """
     Class to create a Comment for a post
     """
@@ -200,7 +209,9 @@ class CategoryListView(generic.ListView):
         return posts
 
 
-class CategoryCreateView(LoginRequiredMixin, generic.CreateView):
+class CategoryCreateView(
+    LoginRequiredMixin, UserIsVerifiedMixin, generic.CreateView
+):
     """
     Class to create a new Category
     """
@@ -217,7 +228,9 @@ class CategoryCreateView(LoginRequiredMixin, generic.CreateView):
 
     def form_valid(self, form):
         """If the form is valid, save the associated model."""
-        messages.success(self.request, "New Category created successfully.")
+        messages.success(
+            self.request, "New Category created successfully."
+        )
         return super().form_valid(form)
 
 
