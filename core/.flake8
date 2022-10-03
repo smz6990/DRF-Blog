@@ -9,5 +9,7 @@ exclude =
     .env,
     settings.py,
     migrations,
+    tests,
+    test_*.py,
     *tests.py,
     __init__.py
