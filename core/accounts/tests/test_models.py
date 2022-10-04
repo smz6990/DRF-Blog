@@ -39,6 +39,20 @@ class TestAccountsModel:
         assert not user_obj.is_superuser
         assert not user_obj.is_verify
 
+    def test_user_model_valid_data_superuser(self):
+        """
+        Test User model with user and password
+        """
+        data = {"email": "test@test.com", "password": "a/1234567"}
+        user_obj = User.objects.create_superuser(**data)
+        assert user_obj.email == data.get("email")
+        assert User.objects.filter(email=data["email"]).exists()
+        assert User.objects.count() == 1
+        assert user_obj.is_staff
+        assert user_obj.is_active
+        assert user_obj.is_superuser
+        assert user_obj.is_verify
+
     def test_profile_model_valid_data(self, basic_user):
         """
         Test Profile model with valid data

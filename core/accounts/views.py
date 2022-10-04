@@ -16,7 +16,7 @@ from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.debug import sensitive_post_parameters
 
-from .permissions import UserIsVerifiedMixin
+from .permissions import UserIsVerifiedMixin, NotAuthenticatedUserMixin
 from .models import Profile, User
 from .forms import (
     CustomUserCreationForm,
@@ -30,7 +30,7 @@ from .forms import (
 from .utils import EmailThreadSend
 
 
-class CustomLoginView(views.LoginView):
+class CustomLoginView(NotAuthenticatedUserMixin, views.LoginView):
     """
     Class that log in a user
     """
@@ -58,7 +58,7 @@ class CustomLogoutView(LoginRequiredMixin, views.LogoutView):
     template_name = "blank.html"
 
 
-class CustomSignUpView(CreateView):
+class CustomSignUpView(NotAuthenticatedUserMixin, CreateView):
     """
     Class that sign up a user
     """
@@ -123,7 +123,9 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
         """
         self.object = self.get_object()
         if self.object.user != request.user:
-            messages.error(request, "You can not see this profile.")
+            messages.error(
+                request, "You dont have permissions to see this page."
+            )
             return HttpResponseRedirect(reverse("website:index"))
         return super().get(request, *args, **kwargs)
 
@@ -133,7 +135,9 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
         """
         self.object = self.get_object()
         if self.object.user != request.user:
-            messages.error(request, "You can not see this profile.")
+            messages.error(
+                request, "You dont have permissions to see this page."
+            )
             return HttpResponseRedirect(reverse("website:index"))
         return super().post(request, *args, **kwargs)
 
@@ -164,7 +168,7 @@ class CustomChangePasswordView(
     """
 
     form_class = CustomPasswordChangeForm
-    success_url = "/"
+    success_url = reverse_lazy("accounts:login")
     template_name = "accounts/change-password.html"
 
     def form_valid(self, form):
@@ -239,7 +243,7 @@ class ResendVerifyEmailView(FormView):
             messages.error(
                 self.request, "User with the given email does not exist!"
             )
-            return redirect(reverse("/"))
+            return redirect(reverse("accounts:resend-verify-email"))
         if user.is_verify:
             messages.info(
                 self.request, "Your account has been already verified!"
@@ -285,7 +289,7 @@ class PasswordResetSend(FormView):
             messages.error(
                 self.request, "User with the given email does not exist!"
             )
-            return redirect(reverse("/"))
+            return redirect(reverse("accounts:password_reset"))
         token = str(AccessToken.for_user(user))
         message = EmailMessage(
             "email/reset-password.tpl",
