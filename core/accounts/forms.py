@@ -52,7 +52,7 @@ class CustomAuthenticationForm(AuthenticationForm):
 
     class Meta:
         model = User
-        fields = ["user", "password", "captcha"]
+        fields = ["username", "password", "captcha"]
 
 
 class CustomPasswordChangeForm(PasswordChangeForm):
