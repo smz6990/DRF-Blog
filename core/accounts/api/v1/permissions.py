@@ -21,9 +21,9 @@ class IsOwner(permissions.BasePermission):
     """
 
     def has_object_permission(self, request, view, obj):
-        # Read permissions are allowed to any request,
-        # so we'll always allow GET, HEAD or OPTIONS requests.
-
+        """Only the owner has permission"""
+        if request.user.is_anonymous:
+            return False
         return obj.user == request.user
 
 
@@ -38,6 +38,23 @@ class IsVerifyOrReadOnly(permissions.BasePermission):
         if request.method in permissions.SAFE_METHODS:
             return True
 
-        if request.user.is_authenticated:
+        if request.user and request.user.is_authenticated:
+            return request.user.is_verify
+        return False
+
+
+class IsVerify(permissions.BasePermission):
+    """
+    Base permission class that only allow verified user.
+    """
+
+    def has_permission(self, request, view):
+        """
+        Reject not verified user
+        """
+        if request.user.is_anonymous:
+            return False
+
+        if request.user and request.user.is_authenticated:
             return request.user.is_verify
         return False

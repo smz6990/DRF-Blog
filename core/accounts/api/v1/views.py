@@ -28,7 +28,11 @@ from .serializers import (
     ResetPasswordSerializer,
     PasswordResetDoneSerializer,
 )
-from .permissions import NotAuthenticated, IsOwner, IsVerifyOrReadOnly
+from .permissions import (
+    NotAuthenticated,
+    IsOwner,
+    IsVerify,
+)
 from ...models import Profile
 from ...utils import EmailThreadSend
 
@@ -128,7 +132,7 @@ class ChangePasswordUpdateAPIView(generics.UpdateAPIView):
 
     serializer_class = ChangePasswordSerializer
     http_method_names = ["put"]
-    permission_classes = [IsAuthenticated, IsVerifyOrReadOnly]
+    permission_classes = [IsVerify]
     model = User
 
     @method_decorator(sensitive_post_parameters())
@@ -166,7 +170,7 @@ class ProfileRetrieveUpdateAPIView(generics.RetrieveUpdateAPIView):
     """
 
     serializer_class = ProfileSerializer
-    permission_classes = [IsAuthenticated, IsOwner, IsVerifyOrReadOnly]
+    permission_classes = [IsVerify, IsOwner]
     queryset = Profile.objects.all()
 
     def get_object(self):
@@ -209,6 +213,11 @@ class VerifyEmailTokenAPIView(APIView):
                 {"errors": "Invalid Token"},
                 status=status.HTTP_400_BAD_REQUEST,
             )
+        except User.DoesNotExist:
+            return Response(
+                {"error": "User not exist"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
 
 class ResendVerifyEmailGenericAPIView(generics.GenericAPIView):
@@ -222,6 +231,11 @@ class ResendVerifyEmailGenericAPIView(generics.GenericAPIView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data.get("user")
+        if user.is_verify:
+            return Response(
+                {"email": f"{user.email} has already activated"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
         token = str(AccessToken.for_user(user))
         message_obj = EmailMessage(
             "email/email-verification-api.tpl",
