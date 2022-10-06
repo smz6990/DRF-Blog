@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     "ckeditor",
     "ckeditor_uploader",
     "mail_templated",
+    "corsheaders",
 ]
 
 MIDDLEWARE = [
@@ -219,5 +220,9 @@ SIMPLE_JWT = {
     "UPDATE_LAST_LOGIN": True,
 }
 
+# cors header settings
+CORS_ALLOW_ALL_ORIGINS = True
+
+CORS_ALLOW_METHODS = ["GET"]
 
 """######################################################"""

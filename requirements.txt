@@ -17,3 +17,4 @@ flake8
 pytest
 pytest-django
 Faker
+django-cors-headers
