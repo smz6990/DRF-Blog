@@ -5,7 +5,6 @@ __pycache__/
 
 # C extensions
 *.so
-.vscode
 # Distribution / packaging
 .Python
 build/
@@ -60,7 +59,7 @@ cover/
 local_settings.py
 db.sqlite3
 db.sqlite3-journal
-
+.vscode
 # Flask stuff:
 instance/
 .webassets-cache
@@ -112,7 +111,6 @@ celerybeat.pid
 *.sage.py
 
 # Environments
-.env
 .venv
 env/
 venv/
