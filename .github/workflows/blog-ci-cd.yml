@@ -16,4 +16,4 @@ jobs:
     - name: Build the Docker-Compose
       run: docker-compose up -d
     - name: Run Tests
-    - run: docker-compose exec -T backend sh -c "flake8 . && pytest ."
+      run: docker-compose exec -T backend sh -c "flake8 . && pytest ."
