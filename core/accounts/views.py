@@ -1,22 +1,36 @@
 from django.contrib.auth import views
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import CreateView, UpdateView
-from django.contrib.auth import authenticate, login
-from django.urls import reverse
+from django.views.generic import CreateView, UpdateView, View, FormView
+from django.contrib.auth import authenticate
+from django.urls import reverse, reverse_lazy
 from django.http import HttpResponseRedirect
+from django.shortcuts import redirect
 from django.contrib.auth import update_session_auth_hash
+from mail_templated import EmailMessage
+from rest_framework_simplejwt.tokens import AccessToken
+import jwt
+from django.conf import settings
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import never_cache
+from django.views.decorators.csrf import csrf_protect
+from django.views.decorators.debug import sensitive_post_parameters
 
-from .models import Profile
+from .permissions import UserIsVerifiedMixin, NotAuthenticatedUserMixin
+from .models import Profile, User
 from .forms import (
     CustomUserCreationForm,
     ProfileFrom,
     CustomAuthenticationForm,
     CustomPasswordChangeForm,
+    ResendVerifyEmailForm,
+    CustomPasswordResetForm,
+    ReSetPasswordForm,
 )
+from .utils import EmailThreadSend
 
 
-class CustomLoginView(views.LoginView):
+class CustomLoginView(NotAuthenticatedUserMixin, views.LoginView):
     """
     Class that log in a user
     """
@@ -44,7 +58,7 @@ class CustomLogoutView(LoginRequiredMixin, views.LogoutView):
     template_name = "blank.html"
 
 
-class CustomSignUpView(CreateView):
+class CustomSignUpView(NotAuthenticatedUserMixin, CreateView):
     """
     Class that sign up a user
     """
@@ -53,14 +67,30 @@ class CustomSignUpView(CreateView):
     template_name = "accounts/signup.html"
 
     def form_valid(self, form):
-        """If the form is valid, save the associated model."""
+        """
+        If the form is valid, save the associated model,
+        and send verification email.
+        """
         self.object = form.save()
         valid = super(CustomSignUpView, self).form_valid(form)
         email = self.request.POST["email"]
         password = self.request.POST["password1"]
         user = authenticate(self.request, email=email, password=password)
-        login(self.request, user)
-        messages.success(self.request, "You account successfully created.")
+        token = str(AccessToken.for_user(user))
+        message = EmailMessage(
+            "email/email-verification.tpl",
+            {"token": token, "user": user},
+            "info@test.com",
+            to=[email],
+        )
+        EmailThreadSend(message).start()
+
+        messages.success(
+            self.request, "Your account successfully created."
+        )
+        messages.success(
+            self.request, "Verification email is send to your email."
+        )
         return valid
 
     def form_invalid(self, form):
@@ -93,7 +123,9 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
         """
         self.object = self.get_object()
         if self.object.user != request.user:
-            messages.error(request, "You can not see this profile.")
+            messages.error(
+                request, "You dont have permissions to see this page."
+            )
             return HttpResponseRedirect(reverse("website:index"))
         return super().get(request, *args, **kwargs)
 
@@ -103,7 +135,9 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
         """
         self.object = self.get_object()
         if self.object.user != request.user:
-            messages.error(request, "You can not see this profile.")
+            messages.error(
+                request, "You dont have permissions to see this page."
+            )
             return HttpResponseRedirect(reverse("website:index"))
         return super().post(request, *args, **kwargs)
 
@@ -121,18 +155,20 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
         )
         return super().form_valid(form)
 
+    def get_success_url(self):
+        pk = self.request.user.id
+        return reverse("accounts:profile", kwargs={"pk": pk})
 
-def password_reset_request_view(request):
-    pass
 
-
-class CustomChangePasswordView(views.PasswordChangeView):
+class CustomChangePasswordView(
+    LoginRequiredMixin, UserIsVerifiedMixin, views.PasswordChangeView
+):
     """
     Customizing the ChangePasswordView
     """
 
     form_class = CustomPasswordChangeForm
-    success_url = "/"
+    success_url = reverse_lazy("accounts:login")
     template_name = "accounts/change-password.html"
 
     def form_valid(self, form):
@@ -151,3 +187,170 @@ class CustomChangePasswordView(views.PasswordChangeView):
     def get_success_url(self):
         pk = self.request.user.id
         return reverse("accounts:profile", kwargs={"pk": pk})
+
+
+class VerifyEmailView(View):
+    """
+    View to verify user by given email
+    """
+
+    def get(self, request, *args, **kwargs):
+        token = kwargs.get("token")
+        try:
+            payload = jwt.decode(
+                jwt=token, key=settings.SECRET_KEY, algorithms=["HS256"]
+            )
+            user = User.objects.get(id=payload["user_id"])
+            if not user.is_verify:
+                user.is_verify = True
+                user.save()
+                messages.success(request, "Your email is verified!")
+                return redirect(
+                    reverse("accounts:profile", kwargs={"pk": user.id})
+                )
+            else:
+                messages.info(
+                    request, "Your email has already been verified!"
+                )
+                return redirect(
+                    reverse("accounts:profile", kwargs={"pk": user.id})
+                )
+        except jwt.ExpiredSignatureError:
+            messages.error(request, "Activations link expired")
+            return redirect(reverse("accounts:resend-verify-email"))
+        except jwt.exceptions.DecodeError:
+            messages.error(request, "Invalid Token")
+            return redirect(reverse("accounts:resend-verify-email"))
+
+
+class ResendVerifyEmailView(FormView):
+    """
+    View to resend verification email
+    """
+
+    form_class = ResendVerifyEmailForm
+    template_name = "accounts/email-verify-resend.html"
+
+    @method_decorator(csrf_protect)
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
+
+    def form_valid(self, form):
+        email = form.cleaned_data.get("email")
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            messages.error(
+                self.request, "User with the given email does not exist!"
+            )
+            return redirect(reverse("accounts:resend-verify-email"))
+        if user.is_verify:
+            messages.info(
+                self.request, "Your account has been already verified!"
+            )
+            return redirect(
+                reverse("accounts:profile", kwargs={"pk": user.id})
+            )
+        token = str(AccessToken.for_user(user))
+        message = EmailMessage(
+            "email/email-verification.tpl",
+            {"token": token, "user": user},
+            "info@test.com",
+            to=[email],
+        )
+        EmailThreadSend(message).start()
+        messages.success(
+            self.request, "Verification email is sent to you!"
+        )
+        return redirect("/")
+
+    def form_invalid(self, form):
+        messages.error(self.request, form.errors)
+        return super().form_invalid(form)
+
+
+class PasswordResetSend(FormView):
+    """
+    View to send email to reset password.
+    """
+
+    form_class = CustomPasswordResetForm
+    template_name = "accounts/password_reset.html"
+
+    @method_decorator(csrf_protect)
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
+
+    def form_valid(self, form):
+        email = form.cleaned_data.get("email")
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            messages.error(
+                self.request, "User with the given email does not exist!"
+            )
+            return redirect(reverse("accounts:password_reset"))
+        token = str(AccessToken.for_user(user))
+        message = EmailMessage(
+            "email/reset-password.tpl",
+            {"token": token, "user": user},
+            "info@test.com",
+            to=[email],
+        )
+        EmailThreadSend(message).start()
+        messages.success(
+            self.request, "reset password email is sent to your inbox!"
+        )
+        return redirect("/")
+
+    def form_invalid(self, form):
+        messages.error(self.request, form.errors)
+        return super().form_invalid(form)
+
+
+class PasswordResetDoneView(FormView):
+    """
+    View to set new password for user without old password
+    """
+
+    success_url = reverse_lazy("accounts:login")
+    form_class = ReSetPasswordForm
+    template_name = "accounts/password_reset_confirm.html"
+
+    @method_decorator(sensitive_post_parameters())
+    @method_decorator(never_cache)
+    def dispatch(self, *args, **kwargs):
+        self.token = kwargs.get("token")
+        return super().dispatch(*args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        self.token = kwargs.get("token")
+        return super().get(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        request = self.request
+        token = self.token
+        try:
+            payload = jwt.decode(
+                jwt=token, key=settings.SECRET_KEY, algorithms=["HS256"]
+            )
+            user = User.objects.get(id=payload["user_id"])
+            password = form.data.get("new_password")
+            user.set_password(password)
+            user.save()
+            update_session_auth_hash(request, user)
+            messages.success(
+                request, "Your password changed successfully!"
+            )
+            messages.success(request, f"'{user}', please login!")
+        except jwt.ExpiredSignatureError:
+            messages.error(request, "Activations link expired")
+            return redirect(reverse("accounts:resend-verify-email"))
+        except jwt.exceptions.DecodeError:
+            messages.error(request, "Invalid Token")
+            return redirect(reverse("accounts:resend-verify-email"))
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        messages.error(self.request, form.errors)
+        return super().form_invalid(form)

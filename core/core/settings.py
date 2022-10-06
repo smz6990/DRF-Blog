@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     "simplemathcaptcha",
     "ckeditor",
     "ckeditor_uploader",
+    "mail_templated",
 ]
 
 MIDDLEWARE = [
@@ -154,10 +155,12 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
 """###################### our apps ######################"""
+
 # config for custom user in accounts app
 AUTH_USER_MODEL = "accounts.User"
 LOGIN_URL = "accounts:login"
 LOGIN_REDIRECT_URL = "/"
+
 # message framework config
 MESSAGE_TAGS = {
     messages.DEBUG: "alert-secondary",
@@ -166,6 +169,15 @@ MESSAGE_TAGS = {
     messages.WARNING: "alert-warning",
     messages.ERROR: "alert-danger",
 }
+
+# email settings
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp4dev"
+EMAIL_PORT = 25
+EMAIL_USE_TLS = False
+EMAIL_HOST_USER = ""
+EMAIL_HOST_PASSWORD = ""
+
 """######################################################"""
 """################## Third Party apps ##################"""
 

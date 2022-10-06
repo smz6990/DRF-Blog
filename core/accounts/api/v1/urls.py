@@ -38,21 +38,24 @@ urlpatterns = [
         views.ProfileRetrieveUpdateAPIView.as_view(),
         name="profile",
     ),
-    # path(
-    #     "password_reset/",
-    #     views.password_reset_request_view,
-    #     name="password_reset",
-    # ),
-    # accounts/password_change/ [name='password_change']
-    # accounts/password_change/done/ [name='password_change_done']
-    # path('password_reset/done/',
-    #     auth_views.PasswordResetDoneView.as_view(template_name='registration/password_reset_done.html'),
-    #     name='password_reset_done'),
-    # path('reset/<uidb64>/<token>/',
-    #     auth_views.PasswordResetConfirmView.as_view(template_name="registration/password_reset_confirm.html",
-    #     post_reset_login=False,success_url='/registration/reset/done/'),
-    # name='password_reset_confirm'),
-    # path('reset/done/',
-    #     auth_views.PasswordResetCompleteView.as_view(template_name='registration/password_reset_complete.html'),
-    #     name='password_reset_complete'),
+    path(
+        "verify-email/<str:token>/",
+        views.VerifyEmailTokenAPIView.as_view(),
+        name="verify-email",
+    ),
+    path(
+        "verify-email-resend/",
+        views.ResendVerifyEmailGenericAPIView.as_view(),
+        name="verify-resend",
+    ),
+    path(
+        "reset-password/",
+        views.ResetPasswordGenericAPIView.as_view(),
+        name="reset-password",
+    ),
+    path(
+        "reset/<str:token>/",
+        views.PasswordResetDoneGenericAPIView.as_view(),
+        name="reset-password-done",
+    ),
 ]

@@ -120,7 +120,7 @@
                   </form>
                 </div>
                 {% else %}
-                <h4>Please Login to comment</h4>
+                <h4>Please <a href="{% url 'accounts:login' %}">Login</a> to comment</h4>
                 {% endif %}
               </div>
             </div>

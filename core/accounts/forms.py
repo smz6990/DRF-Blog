@@ -3,6 +3,8 @@ from django.contrib.auth import get_user_model
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from simplemathcaptcha.fields import MathCaptchaField
+from django.contrib.auth import password_validation
+from django.core.exceptions import ValidationError
 
 
 from .models import Profile
@@ -50,7 +52,7 @@ class CustomAuthenticationForm(AuthenticationForm):
 
     class Meta:
         model = User
-        fields = ["user", "password", "captcha"]
+        fields = ["username", "password", "captcha"]
 
 
 class CustomPasswordChangeForm(PasswordChangeForm):
@@ -68,3 +70,40 @@ class CustomPasswordChangeForm(PasswordChangeForm):
             "new_password2",
             "captcha",
         ]
+
+
+class ResendVerifyEmailForm(forms.Form):
+    """
+    Form to get email to send verification email.
+    """
+
+    email = forms.EmailField(max_length=255)
+
+
+class CustomPasswordResetForm(forms.Form):
+    """
+    Form for getting user email to send reset password link.
+    """
+
+    email = forms.EmailField(max_length=255)
+
+
+class ReSetPasswordForm(forms.Form):
+    """
+    Form for set new password for user.
+    """
+
+    new_password = forms.CharField(
+        max_length=255,
+        help_text=password_validation.password_validators_help_text_html(),
+    )
+    new_password1 = forms.CharField(max_length=255)
+
+    def is_valid(self):
+        password1 = self.data.get("new_password")
+        password2 = self.data.get("new_password1")
+        if password1 and password2:
+            if password1 != password2:
+                raise ValidationError("password_mismatch")
+        password_validation.validate_password(password1)
+        return super().is_valid()
