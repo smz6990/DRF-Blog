@@ -1,6 +1,16 @@
 version: "3.9"
 
 services:
+
+  redis:
+    image: redis
+    container_name: redis
+    restart: always
+    ports:
+      - "6379:6379"
+    command: redis-server --save 60 1 --loglevel warning
+    volumes:
+      - ./redisdata:/data
   backend:
     build:
       context: .
@@ -14,6 +24,8 @@ services:
       - ./core:/app
     env_file:
       - envs/development/django/.env
+    depends_on:
+      - redis
   
   smtp4dev:
     image: rnwood/smtp4dev:v3
@@ -26,21 +38,30 @@ services:
         - smtp4dev-data:/smtp4dev
     environment:
       - ServerOptions__HostName=smtp4dev
+  worker-celery:
+    build:
+      context: .
+      dockerfile: ./dockerfiles/development/django/Dockerfile
+    command: celery -A core worker --loglevel=info  --concurrency=1
+    container_name: celery-worker
+    restart: always
+    depends_on:
+      - redis
+      - backend
+    volumes:
+     - ./core:/app
 
-  master:
-    image: locustio/locust
-    ports:
-     - "8089:8089"
-    restart: on-failure
+  worker-celery-beat:
+    build:
+      context: .
+      dockerfile: ./dockerfiles/development/django/Dockerfile
+    command: celery -A core worker --loglevel=info  --concurrency=1 && celery -A core beat -l INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler
+    container_name: celery-beat-worker
+    restart: always
+    depends_on:
+      - redis
+      - backend
     volumes:
-      - ./core/locust:/mnt/locust
-    command: -f /mnt/locust/locustfile.py --master -H http://backend:8000
-  
-  worker:
-    image: locustio/locust
-    restart: on-failure
-    volumes:
-      - ./core/locust:/mnt/locust
-    command: -f /mnt/locust/locustfile.py --worker --master-host master
+     - ./core:/app
 volumes:
   smtp4dev-data:

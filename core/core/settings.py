@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     "ckeditor_uploader",
     "mail_templated",
     "corsheaders",
+    "django_celery_beat",
 ]
 
 MIDDLEWARE = [
@@ -222,7 +223,10 @@ SIMPLE_JWT = {
 
 # cors header settings
 CORS_ALLOW_ALL_ORIGINS = True
-
 CORS_ALLOW_METHODS = ["GET"]
+
+# celery and redis config
+
+CELERY_BROKER_URL = "redis://redis:6379/1"
 
 """######################################################"""
