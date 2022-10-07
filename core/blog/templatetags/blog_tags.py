@@ -21,7 +21,7 @@ def categories_tag():
 @register.inclusion_tag("blog/blog-top-stories.html")
 def top_stories_tag():
     posts = Post.objects.filter(status=True)
-    return {"posts": posts}
+    return {"posts": posts[posts.count() - 2:]}
 
 
 @register.inclusion_tag("blog/blog-recent-post.html")
