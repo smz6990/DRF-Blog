@@ -8,15 +8,30 @@ services:
     restart: always
     ports:
       - "80:80"
+      - "443:443"
     volumes:
-      - ./conf.d/stage/default.conf:/etc/nginx/conf.d/deault.conf
+      - ./conf.d/production/default.conf:/etc/nginx/conf.d/deault.conf:ro
       - static_volume:/home/app/static
       - media_volume:/home/app/media
+      - ./certbot/www:/var/www/certbot/:ro
+      - ./certbot/conf/:/etc/nginx/ssl/:ro
     depends_on:
       - redis
       - backend
     networks:
       - backend-network
+
+  certbot:
+    image: certbot/certbot:latest
+    container_name: certbot
+    volumes:
+    - ./certbot/www/:/var/www/certbot/:rw
+    - ./certbot/conf/:/etc/letsencrypt/:rw
+    depends_on:
+      - nginx
+    networks:
+      backend-network:
+
 
   redis:
     image: redis:6.2.7-alpine
@@ -33,7 +48,7 @@ services:
   backend:
     build:
       context: .
-      dockerfile: ./dockerfiles/stage/django/Dockerfile
+      dockerfile: ./dockerfiles/production/django/Dockerfile
     container_name: backend
     restart: always
     command:  gunicorn core.wsgi --bind 0.0.0.0:8000
@@ -44,7 +59,7 @@ services:
       - static_volume:/app/static
       - media_volume:/app/media
     env_file:
-      - envs/stage/django/.env
+      - envs/production/django/.env
     depends_on:
       - redis
       - db
@@ -54,7 +69,7 @@ services:
   worker-celery:
     build:
       context: .
-      dockerfile: ./dockerfiles/stage/django/Dockerfile
+      dockerfile: ./dockerfiles/production/django/Dockerfile
     command: celery -A core worker --loglevel=info
     container_name: celery-worker
     restart: always
@@ -75,7 +90,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     env_file:
-      - envs/stage/postgres/.env
+      - envs/production/postgres/.env
     networks:
       - backend-network
 
