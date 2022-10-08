@@ -1,0 +1,36 @@
+name: Blog Test and Deploy
+
+on:
+  push:
+    branches: [ production ]
+  pull_request:
+    branches: [ production ]
+
+jobs:
+
+  Test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup Docker-Compose
+      run: docker-compose up -d
+    - name: Run Tests
+      run: docker-compose exec backend sh -c "flake8 && pytest ."
+
+  
+  Deploy:
+    if: ${{ always() && contains(join(needs.*.result, ','), 'success') }} 
+    name: Deploy
+    needs: Test
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Connect to vps
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{secrets.HOST}}
+        username: ${{secrets.USERNAME}}
+        key: ${{secrets.KEY}}
+        port: ${{secrets.PORT}}
+        script: ls
