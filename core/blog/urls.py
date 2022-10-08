@@ -23,7 +23,9 @@ urlpatterns = [
         views.BlogDeletePostView.as_view(),
         name="delete-post",
     ),
-    path("comment/", views.BlogCommentCreateView.as_view(), name="comment"),
+    path(
+        "comment/", views.BlogCommentCreateView.as_view(), name="comment"
+    ),
     path(
         "category/<str:cat_name>/",
         views.CategoryListView.as_view(),
