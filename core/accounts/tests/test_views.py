@@ -247,9 +247,7 @@ class TestAccountsViews:
         response = anonymous_user.get(url)
         assert response.status_code == 302
 
-    def test_change_password_view_POST_anonymous_user(
-        self, anonymous_user
-    ):
+    def test_change_password_view_POST_anonymous_user(self, anonymous_user):
         """
         Test for CustomChangePasswordView by POST method with anonymous user
         """

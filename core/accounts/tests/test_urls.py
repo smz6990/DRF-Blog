@@ -24,9 +24,7 @@ class TestAccountsUrls:
 
     def test_custom_change_password_url_resolve(self):
         url = reverse("accounts:change-password")
-        assert (
-            resolve(url).func.view_class == views.CustomChangePasswordView
-        )
+        assert resolve(url).func.view_class == views.CustomChangePasswordView
 
     def test_verify_email_url_resolve(self):
         url = reverse("accounts:verify-email", kwargs={"token": 1})

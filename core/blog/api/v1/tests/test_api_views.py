@@ -291,9 +291,7 @@ class TestBlogApiViews:
         response = anonymous_user.post(url, data)
         assert response.status_code == 401
 
-    def test_blog_category_list_create_api_GET_logged_user(
-        self, test_user
-    ):
+    def test_blog_category_list_create_api_GET_logged_user(self, test_user):
         """
         Test CategoryListCreateAPIView by GET method with authenticated user
         """

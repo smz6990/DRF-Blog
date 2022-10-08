@@ -13,9 +13,7 @@ class TestAccountsApiUrls:
 
     def test_token_logout_api_url(self):
         url = reverse("accounts:api-v1:token-logout")
-        assert (
-            resolve(url).func.view_class == views.CustomLogOutDiscardToken
-        )
+        assert resolve(url).func.view_class == views.CustomLogOutDiscardToken
 
     def test_signup_api_url(self):
         url = reverse("accounts:api-v1:signup")
@@ -38,8 +36,7 @@ class TestAccountsApiUrls:
     def test_change_password_update_api_url(self):
         url = reverse("accounts:api-v1:change-password")
         assert (
-            resolve(url).func.view_class
-            == views.ChangePasswordUpdateAPIView
+            resolve(url).func.view_class == views.ChangePasswordUpdateAPIView
         )
 
     def test_profile_api_url(self):
@@ -53,9 +50,7 @@ class TestAccountsApiUrls:
         url = reverse(
             "accounts:api-v1:verify-email", kwargs={"token": "123"}
         )
-        assert (
-            resolve(url).func.view_class == views.VerifyEmailTokenAPIView
-        )
+        assert resolve(url).func.view_class == views.VerifyEmailTokenAPIView
 
     def test_verify_email_resend_api_url(self):
         url = reverse("accounts:api-v1:verify-resend")
@@ -67,8 +62,7 @@ class TestAccountsApiUrls:
     def test_reset_password_api_url(self):
         url = reverse("accounts:api-v1:reset-password")
         assert (
-            resolve(url).func.view_class
-            == views.ResetPasswordGenericAPIView
+            resolve(url).func.view_class == views.ResetPasswordGenericAPIView
         )
 
     def test_reset_password_done_api_url(self):

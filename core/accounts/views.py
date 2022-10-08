@@ -85,9 +85,7 @@ class CustomSignUpView(NotAuthenticatedUserMixin, CreateView):
         )
         EmailThreadSend(message).start()
 
-        messages.success(
-            self.request, "Your account successfully created."
-        )
+        messages.success(self.request, "Your account successfully created.")
         messages.success(
             self.request, "Verification email is send to your email."
         )
@@ -150,9 +148,7 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
     def form_valid(self, form):
         """If the form is valid, save the associated model."""
         form.instance.user = self.request.user
-        messages.success(
-            self.request, "Your Profile updated successfully."
-        )
+        messages.success(self.request, "Your Profile updated successfully.")
         return super().form_valid(form)
 
     def get_success_url(self):
@@ -259,9 +255,7 @@ class ResendVerifyEmailView(FormView):
             to=[email],
         )
         EmailThreadSend(message).start()
-        messages.success(
-            self.request, "Verification email is sent to you!"
-        )
+        messages.success(self.request, "Verification email is sent to you!")
         return redirect("/")
 
     def form_invalid(self, form):
@@ -339,9 +333,7 @@ class PasswordResetDoneView(FormView):
             user.set_password(password)
             user.save()
             update_session_auth_hash(request, user)
-            messages.success(
-                request, "Your password changed successfully!"
-            )
+            messages.success(request, "Your password changed successfully!")
             messages.success(request, f"'{user}', please login!")
         except jwt.ExpiredSignatureError:
             messages.error(request, "Activations link expired")

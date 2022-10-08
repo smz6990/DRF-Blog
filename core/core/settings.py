@@ -206,9 +206,7 @@ else:
     )
     EMAIL_HOST = config("EMAIL_HOST", default="mail.example.come")
     EMAIL_PORT = int(config("EMAIL_PORT", default=465))
-    EMAIL_HOST_USER = config(
-        "EMAIL_HOST_USER", default="infor@example.com"
-    )
+    EMAIL_HOST_USER = config("EMAIL_HOST_USER", default="infor@example.com")
     EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD", default="password")
     EMAIL_USE_SSL = config("EMAIL_USE_SSL", cast=bool, default=True)
     EMAIL_USE_TLS = config("EMAIL_USE_TLS", cast=bool, default=False)

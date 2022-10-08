@@ -119,9 +119,7 @@ class TestAccountsApiViews:
         response = anonymous_user.post(url, data)
         assert response.status_code == 400
 
-    def test_custom_obtain_auth_token_view_POST_logged_user(
-        self, test_user
-    ):
+    def test_custom_obtain_auth_token_view_POST_logged_user(self, test_user):
         """
         Test CustomObtainAuthToken by POST method with logged user
         """
@@ -267,9 +265,7 @@ class TestAccountsApiViews:
         response = test_user.get(url)
         assert response.status_code == 200
 
-    def test_profile_RU_view_GET_not_verified_user(
-        self, not_verified_user
-    ):
+    def test_profile_RU_view_GET_not_verified_user(self, not_verified_user):
         """
         Test ProfileRetrieveUpdateAPIView by GET method with not verified user
         """
@@ -305,9 +301,7 @@ class TestAccountsApiViews:
         response = test_user.put(url, data)
         assert response.status_code == 200
 
-    def test_profile_RU_view_PUT_not_verified_user(
-        self, not_verified_user
-    ):
+    def test_profile_RU_view_PUT_not_verified_user(self, not_verified_user):
         """
         Test ProfileRetrieveUpdateAPIView by PUT method with not verified user
         """
@@ -457,9 +451,7 @@ class TestAccountsApiViews:
         response = anonymous_user.post(url, data)
         assert response.status_code == 400
 
-    def test_resend_verify_email_token_view_POST_test_user(
-        self, test_user
-    ):
+    def test_resend_verify_email_token_view_POST_test_user(self, test_user):
         """
         Test ResendVerifyEmailGenericAPIView by POST method with test user
         """
