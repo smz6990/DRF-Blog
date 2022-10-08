@@ -2,9 +2,9 @@ name: Blog Test and Deploy
 
 on:
   push:
-    branches: [ production ]
+    branches: [ main ]
   pull_request:
-    branches: [ production ]
+    branches: [ main ]
 
 jobs:
 
