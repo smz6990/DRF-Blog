@@ -1,0 +1,88 @@
+version: "3.9"
+
+services:
+
+  nginx:
+    image: nginx:alpine
+    container_name: nginx
+    restart: always
+    ports:
+      - "80:80"
+    volumes:
+      - ./default.conf:/etc/nginx/conf.d/deault.conf
+      - static_volume:/home/app/static
+      - media_volume:/home/app/media
+    depends_on:
+      - redis
+      - backend
+    networks:
+      - backend-network
+
+  redis:
+    image: redis:6.2.7-alpine
+    container_name: redis
+    restart: always
+    ports:
+      - "6379:6379"
+    command: redis-server --save 60 1 --loglevel warning
+    volumes:
+      - ./redisdata:/data
+    networks:
+      - backend-network
+    
+  backend:
+    build:
+      context: .
+      dockerfile: ./dockerfiles/stage/django/Dockerfile
+    container_name: backend
+    restart: always
+    command:  gunicorn core.wsgi --bind 0.0.0.0:8000
+    expose:
+      - "8000"
+    volumes:
+      - ./core:/app
+      - static_volume:/app/static
+      - media_volume:/app/media
+    env_file:
+      - envs/stage/django/.env
+    depends_on:
+      - redis
+      - db
+    networks:
+      - backend-network
+
+  worker-celery:
+    build:
+      context: .
+      dockerfile: ./dockerfiles/stage/django/Dockerfile
+    command: celery -A core worker --loglevel=info
+    container_name: celery-worker
+    restart: always
+    depends_on:
+      - redis
+      - backend
+    volumes:
+     - ./core:/app
+    networks:
+      - backend-network
+
+  db:
+    image: postgres:13-alpine
+    container_name: postgres
+    ports:
+    - "5432:5432"
+    restart: always
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    env_file:
+      - envs/stage/postgres/.env
+    networks:
+      - backend-network
+
+volumes:
+  static_volume:
+  media_volume:
+  postgres_data:
+
+networks:
+  backend-network:

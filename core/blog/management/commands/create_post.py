@@ -39,8 +39,9 @@ class Command(BaseCommand):
                 "published_date": timezone.now(),
             }
             post = Post.objects.create(**data)
-            post.category.set((self.get_random_category(),))
-            post.save()
+            if category := self.get_random_category():
+                post.category.set((category,))
+                post.save()
 
         self.stdout.write(
             self.style.SUCCESS(
@@ -50,4 +51,7 @@ class Command(BaseCommand):
 
     def get_random_category(self):
         query = Category.objects.all()
-        return query[randint(0, query.count() - 1)]
+        if query:
+            return query[randint(0, query.count() - 1)]
+        else:
+            return None
