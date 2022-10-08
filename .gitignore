@@ -35,6 +35,7 @@ MANIFEST
 pip-log.txt
 pip-delete-this-directory.txt
 log.django
+
 # Unit test / coverage reports
 htmlcov/
 .tox/
@@ -60,6 +61,7 @@ local_settings.py
 db.sqlite3
 db.sqlite3-journal
 .vscode
+
 # Flask stuff:
 instance/
 .webassets-cache
@@ -108,6 +110,7 @@ celerybeat-schedule
 celerybeat.pid
 redisdata
 dump.rdb
+
 # SageMath parsed files
 *.sage.py
 
@@ -149,3 +152,11 @@ cython_debug/
 #  and can be added to the global gitignore or merged into this file.  For a more nuclear
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
+
+#postgres db data directory
+data/
+
+# Only for Development only
+**/migrations/**
+!**/migrations
+!**/migrations/__init__.py

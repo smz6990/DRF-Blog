@@ -15,6 +15,7 @@ RUN pip3 install -r requirements.txt
 COPY ./core /app/
 
 RUN mkdir -p /app/staticfiles
-CMD python3 manage.py makemigrations --noinput && \
+CMD python3 manage.py check_database && \
+    python3 manage.py makemigrations --noinput && \
     python3 manage.py migrate --noinput && \
     python3 manage.py collectstatic --noinput && \
