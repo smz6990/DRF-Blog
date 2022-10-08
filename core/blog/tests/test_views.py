@@ -112,9 +112,7 @@ class TestBlogViews:
         response = anonymous_user.get(url)
         assert response.status_code == 404
 
-    def test_blog_create_post_view_GET_auth_user_verified(
-        self, logged_user
-    ):
+    def test_blog_create_post_view_GET_auth_user_verified(self, logged_user):
         """
         Testing BlogCreatePostView in GET method with authorized and
         verified user
@@ -134,9 +132,7 @@ class TestBlogViews:
         response = not_verified_user.get(url)
         assert response.status_code == 403
 
-    def test_blog_create_post_view_GET_anonymous_user(
-        self, anonymous_user
-    ):
+    def test_blog_create_post_view_GET_anonymous_user(self, anonymous_user):
         """
         Testing BlogCreatePostView in GET method with not authorized user
         """
@@ -186,9 +182,7 @@ class TestBlogViews:
         response = not_verified_user.post(url, data)
         assert response.status_code == 403
 
-    def test_blog_create_post_view_POST_anonymous_user(
-        self, anonymous_user
-    ):
+    def test_blog_create_post_view_POST_anonymous_user(self, anonymous_user):
         """
         Testing BlogCreatePostView in GET method with not authorized user
         """
@@ -502,9 +496,7 @@ class TestBlogViews:
         # redirect to login page
         assert response.status_code == 200
 
-    def test_category_create_view_GET_auth_user_verified(
-        self, logged_user
-    ):
+    def test_category_create_view_GET_auth_user_verified(self, logged_user):
         """
         Testing CategoryCreateView in GET method with authorized and
         verified user
@@ -533,9 +525,7 @@ class TestBlogViews:
         # redirect to login page
         assert response.status_code == 302
 
-    def test_category_create_view_POST_auth_user_verified(
-        self, logged_user
-    ):
+    def test_category_create_view_POST_auth_user_verified(self, logged_user):
         """
         Testing CategoryCreateView in POST method with authorized and
         verified user
@@ -555,9 +545,7 @@ class TestBlogViews:
         response = not_verified_user.post(url, data={"name": "test"})
         assert response.status_code == 403
 
-    def test_category_create_view_POST_anonymous_user(
-        self, anonymous_user
-    ):
+    def test_category_create_view_POST_anonymous_user(self, anonymous_user):
         """
         Testing CategoryCreateView in POST method with anonymous user
         """

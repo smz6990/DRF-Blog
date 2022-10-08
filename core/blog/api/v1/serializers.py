@@ -106,7 +106,5 @@ class PostSerializer(serializers.ModelSerializer):
             user__email=self.context.get("request").user
         )
         validated_data["author"] = author
-        validated_data["status"] = (
-            now() >= validated_data["published_date"]
-        )
+        validated_data["status"] = now() >= validated_data["published_date"]
         return super().create(validated_data)

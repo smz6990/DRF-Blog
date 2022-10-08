@@ -9,8 +9,7 @@ class TestBlogApiUrls:
     def test_blog_post_list_api_url(self):
         url = reverse("blog:api-v1:post-list")
         assert (
-            resolve(url).func.view_class
-            == views.BlogIndexListCreateAPIView
+            resolve(url).func.view_class == views.BlogIndexListCreateAPIView
         )
 
     def test_blog_post_single_api_url(self):

@@ -29,6 +29,4 @@ class Command(BaseCommand):
                     self.style.NOTICE("There is no new post to publish!")
                 )
         else:
-            self.stdout.write(
-                self.style.NOTICE("Every post is published!")
-            )
+            self.stdout.write(self.style.NOTICE("Every post is published!"))
