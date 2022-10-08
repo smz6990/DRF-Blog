@@ -1,18 +1,16 @@
 import pytest
 from django.test import Client
-from django.contrib.auth import get_user_model
 from django.urls import reverse
 from rest_framework_simplejwt.tokens import AccessToken
 from django.core.exceptions import ValidationError
 
-
-User = get_user_model()
+from ..models import Profile, User
 
 
 @pytest.fixture
 def create_basic_user():
     data = {"email": "test@test.com", "password": "a/1234567"}
-    return User.objects.create(**data, is_verify=True)
+    return User.objects.create_user(**data, is_verify=True)
 
 
 @pytest.fixture
@@ -173,21 +171,27 @@ class TestAccountsViews:
         # redirect user to login page
         assert response.status_code == 302
 
-    def test_profile_update_view_GET_logged_user(self, logged_user):
+    def test_profile_update_view_GET_logged_user(
+        self, create_basic_user, logged_user
+    ):
         """
         Test for ProfileUpdateView by GET method with authenticated user
         """
-        user = User.objects.get(email="test@test.com")
-        url = reverse("accounts:profile", kwargs={"pk": user.id})
+        user = create_basic_user
+        profile = Profile.objects.get(user=user)
+        url = reverse("accounts:profile", kwargs={"pk": profile.id})
         response = logged_user.get(url)
         assert response.status_code == 200
 
-    def test_profile_update_view_POST_logged_user(self, logged_user):
+    def test_profile_update_view_POST_logged_user(
+        self, create_basic_user, logged_user
+    ):
         """
         Test for ProfileUpdateView by POST method with authenticated user
         """
-        user = User.objects.get(email="test@test.com")
-        url = reverse("accounts:profile", kwargs={"pk": user.id})
+        user = create_basic_user
+        profile = Profile.objects.get(user=user)
+        url = reverse("accounts:profile", kwargs={"pk": profile.id})
         data = {
             "first_name": "first name",
             "last_name": "last name",
@@ -207,7 +211,8 @@ class TestAccountsViews:
         user = User.objects.create_user(
             email="test2@test2.com", password="a/1234567"
         )
-        url = reverse("accounts:profile", kwargs={"pk": user.id})
+        profile = Profile.objects.get(user=user)
+        url = reverse("accounts:profile", kwargs={"pk": profile.id})
         response = logged_user.get(url)
         # redirect to website index
         assert response.status_code == 302
@@ -222,7 +227,8 @@ class TestAccountsViews:
         user = User.objects.create_user(
             email="test2@test2.com", password="a/1234567"
         )
-        url = reverse("accounts:profile", kwargs={"pk": user.id})
+        profile = Profile.objects.get(user=user)
+        url = reverse("accounts:profile", kwargs={"pk": profile.id})
         data = {
             "first_name": "first name",
             "last_name": "last name",

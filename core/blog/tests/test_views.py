@@ -4,17 +4,14 @@ from django.test import Client
 from django.urls import reverse
 from django.contrib.auth import get_user_model
 
-from ..models import Post
-from accounts.models import Profile
-
-
-User = get_user_model()
+from ..models import Category, Post
+from accounts.models import Profile, User
 
 
 @pytest.fixture
 def create_basic_user():
     data = {"email": "test@test.com", "password": "a/1234567"}
-    return User.objects.create(**data, is_verify=True)
+    return User.objects.create_user(**data, is_verify=True)
 
 
 @pytest.fixture
@@ -59,7 +56,7 @@ def create_post(user_profile):
 
 @pytest.fixture
 def create_post_not_owner():
-    user = User.objects.create(
+    user = User.objects.create_user(
         email="test2@test@.com", password="a/1234567"
     )
     profile = Profile.objects.create(user=user)
@@ -70,6 +67,11 @@ def create_post_not_owner():
         "published_date": datetime.now(),
     }
     return Post.objects.create(**data)
+
+
+@pytest.fixture
+def create_category():
+    return Category.objects.create(name="category")
 
 
 @pytest.mark.django_db
@@ -476,20 +478,26 @@ class TestBlogViews:
         # redirect to login page
         assert response.status_code == 302
 
-    def test_category_list_view_GET_auth_user_verified(self, logged_user):
+    def test_category_list_view_GET_auth_user_verified(
+        self, logged_user, create_category
+    ):
         """
         Testing CategoryListView in POST method with authorized and
         verified user
         """
-        url = reverse("blog:category", kwargs={"cat_name": "test"})
+        cat = create_category
+        url = reverse("blog:category", kwargs={"cat_name": cat.name})
         response = logged_user.get(url)
         assert response.status_code == 200
 
-    def test_category_list_view_GET_anonymous_user(self, anonymous_user):
+    def test_category_list_view_GET_anonymous_user(
+        self, anonymous_user, create_category
+    ):
         """
         Testing CategoryListView in GET method with anonymous user
         """
-        url = reverse("blog:category", kwargs={"cat_name": "test"})
+        cat = create_category
+        url = reverse("blog:category", kwargs={"cat_name": cat.name})
         response = anonymous_user.get(url)
         # redirect to login page
         assert response.status_code == 200
