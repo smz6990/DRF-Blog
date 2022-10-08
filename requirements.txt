@@ -24,3 +24,4 @@ django-celery-beat
 django-redis
 gunicorn
 psycopg2-binary
+django-robots
