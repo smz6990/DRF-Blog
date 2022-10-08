@@ -38,9 +38,9 @@ services:
     expose:
       - "8000"
     volumes:
-      - ./core:/app
-      - static_volume:/app/static
-      - media_volume:/app/media
+      - ./core:/usr/src/app
+      - static_volume:/usr/src/app/static
+      - media_volume:/usr/src/app/media
     env_file:
       - envs/stage/django/.env
     depends_on:
@@ -60,7 +60,7 @@ services:
       - redis
       - backend
     volumes:
-     - ./core:/app
+      - ./core:/usr/src/app
     networks:
       - backend-network
 

@@ -21,7 +21,7 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - ./core:/app
+      - ./core:/usr/src/app
     env_file:
       - envs/development/django/.env
     depends_on:
@@ -49,8 +49,7 @@ services:
       - redis
       - backend
     volumes:
-     - ./core:/app
-
+      - ./core:/usr/src/app
   worker-celery-beat:
     build:
       context: .
