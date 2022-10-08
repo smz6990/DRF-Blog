@@ -34,7 +34,7 @@ MANIFEST
 # Installer logs
 pip-log.txt
 pip-delete-this-directory.txt
-
+log.django
 # Unit test / coverage reports
 htmlcov/
 .tox/
@@ -106,7 +106,8 @@ __pypackages__/
 # Celery stuff
 celerybeat-schedule
 celerybeat.pid
-
+redisdata
+dump.rdb
 # SageMath parsed files
 *.sage.py
 

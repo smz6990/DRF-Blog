@@ -16,3 +16,11 @@ black
 flake8
 pytest
 pytest-django
+Faker
+django-cors-headers
+celery
+redis
+django-celery-beat
+django-redis
+gunicorn
+psycopg2-binary
