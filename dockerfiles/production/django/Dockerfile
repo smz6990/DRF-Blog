@@ -1,7 +1,5 @@
 # pull official base image
-FROM python:3.8-alpine
-
-LABEL maintainer="bigdeli.ali3@gmail.com"
+FROM python:3.8-alpine3.14
 
 # set work directory
 WORKDIR /usr/src/app

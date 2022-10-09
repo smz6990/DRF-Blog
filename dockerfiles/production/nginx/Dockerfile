@@ -1,4 +1,4 @@
-FROM nginx:alpine
+FROM nginx:1.21.6-alpine
 
 COPY ./config/* /etc/nginx/
 COPY ./entrypoint.sh /entrypoint.sh
