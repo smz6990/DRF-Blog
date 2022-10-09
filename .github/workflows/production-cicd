@@ -35,6 +35,6 @@ jobs:
         port: ${{secrets.PORT}}
         script: |
           cd ${{secrets.PROJECT_PATH}}
-          docker-compose -f docker-compose-production.yml stop
+          docker-compose -f docker-compose-stage.yml stop
           git pull
-          docker-compose -f docker-compose-production.yml restart
+          docker-compose -f docker-compose-stage.yml restart
