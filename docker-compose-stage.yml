@@ -48,7 +48,6 @@ services:
       - db
     networks:
       - backend-network
-
   worker-celery:
     build:
       context: .
