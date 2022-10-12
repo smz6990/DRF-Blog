@@ -1,34 +1,12 @@
 # Blog with Django Rest Framework
 
 
-<!-- TABLE OF CONTENTS -->
-<details>
-  <summary>Table of Contents</summary>
-  <ol>
-    <li>
-      <a href="#about-the-project">About The Project</a>
-      <ul>
-        <li><a href="#built-with">Built With</a></li>
-      </ul>
-    </li>
-    <li>
-      <a href="#getting-started">Getting Started</a>
-      <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#installation">Installation</a></li>
-      </ul>
-    </li>
-    <li><a href="#usage">Usage</a></li>
-  </ol>
-</details>
-
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-#### This is a sample for a blog web application with custom user model and commenting section, each user has its own profile that is customizable and only can see and change by the owner of profile
-#### Each user (that verified) ,can create a post in blog and only the creator of post has the power to edit or delete the post
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
+##### This is a sample for a blog web application with custom user model and commenting section, each user has its own profile that is customizable and only can see and change by the owner of profile
+##### Each user (that verified) ,can create a post in blog and only the creator of post has the power to edit or delete the post.
+##### You can change the env files in env directory to match your preference
 
 
 ### Built With
@@ -47,7 +25,6 @@
 * ![Postgres](https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white)
 * ![Redis](https://img.shields.io/badge/redis-%23DD0031.svg?style=for-the-badge&logo=redis&logoColor=white)
 * ![SQLite](https://img.shields.io/badge/sqlite-%2307405e.svg?style=for-the-badge&logo=sqlite&logoColor=white)
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
 
@@ -60,33 +37,36 @@ This project run in docker and has three phases :
 - production
 
 and each phase has its own docker compose file.
-### Prerequisites
+## Prerequisites
 
 Frist you need to install <a href="https://docs.docker.com/engine/install/">docker</a> and <a href="https://docs.docker.com/compose/install/">docker compose</a> in your local machine or your cloud host.
 
-### Installation
+## Installation
 After installing the docker and docker compose you need to clone the repo
 1. Clone the repo
    ```sh
    git clone https://github.com/smz6990/DRF-Blog.git
    ```
 2. You need to choose which phase do you want to run the project
-#### Run in development phase:
+
+## Run in development phase:
    You have to  be in the same directory of docker-compose.yml file then run:
    ```sh
    docker compose up --build
    ```
- The build flag is for docker to know that we have Dockerfile and it needs to create the image for it first (if you already build the image ,it dont need it, but if you made changes to dockerfile or requirements file you must add build flag. also you can run the command with *-d* to run in detach mode)
- ##### To stop docker containers use:
+ The build flag is for docker to know that we have Dockerfile and some requirement for the project and it needs to create the image for it first (if you already build the image ,it dont need it, but if you made changes to dockerfile or requirements.txt file you must add build flag. also you can run the command with *-d* to run in detach mode)
+ 
+ #### To stop all the docker containers use:
  ```sh
  docker compose stop
  ```
- ##### To remove docke container use:
+ ##### To remove all docke containers use:
  ```sh
  docker compose down
  ```
  <hr>
- #### Run in stage phase:
+ 
+ ## Run in stage phase:
    You have to  be in the same directory of docker-compose-stage.yml file then run:
    
    ```sh
@@ -100,6 +80,44 @@ After installing the docker and docker compose you need to clone the repo
  ```sh
  docker compose -f docker-compose-stage.yml down
  ```
- to be continue ...
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<hr>
+
+## Run in production 
+
+the production phase actually done by <a href="https://github.com/AliBigdeli">Ali Bigdeli</a> and credit to him and his great <a href="https://github.com/AliBigdeli/Ultimate-Django3.2-Template">repo</a> , he did a fantastic job and check his repo for more information on production phase and other great work he is done.
+
+<hr>
+
+## bonus:
+
+  actually this project has another docker compose file and it is docker-compose-locust.yml
+  It is for stress/load testing your web app before deployment to make sure your web app can handle the work load as you thought
+  check <a href="https://locust.io/">locust</a> for more information.
+  Now back to our thing.
+  
+  You have to  be in the same directory of docker-compose-locust.yml file then run:
+   
+   ```sh
+   docker compose -f docker-compose-locust.yml up --build
+   ```
+   
+   and browse 127.0.0.1:8089
+   
+ ##### To stop docker containers use:
+ ```sh
+ docker compose -f docker-compose-locust.yml stop
+ ```
+ ##### To remove docke container use:
+ ```sh
+ docker compose -f docker-compose-locust.yml down
+ ```
+
+<hr>
+
+And thats it .
+
+Feel free to ask me any question
+
+saleh.mohammadzadeh@gmail.com
 
