@@ -9,5 +9,5 @@ This is a verification email.
 {% endblock %}
 
 {% block html %}
-Please click <a href="http://127.0.0.1:8000/accounts/api/v1/verify-email/{{token}}/" >here</a> to verify you accounts.
+Please click <a href="${{secrets.SITE}}accounts/api/v1/verify-email/{{token}}/" >here</a> to verify you accounts.
 {% endblock %}

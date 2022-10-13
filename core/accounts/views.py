@@ -80,7 +80,7 @@ class CustomSignUpView(NotAuthenticatedUserMixin, CreateView):
         message = EmailMessage(
             "email/email-verification.tpl",
             {"token": token, "user": user},
-            "info@test.com",
+            "noreply@salehmzh.ir",
             to=[email],
         )
         EmailThreadSend(message).start()
@@ -251,7 +251,7 @@ class ResendVerifyEmailView(FormView):
         message = EmailMessage(
             "email/email-verification.tpl",
             {"token": token, "user": user},
-            "info@test.com",
+            "noreply@salehmzh.ir",
             to=[email],
         )
         EmailThreadSend(message).start()
@@ -288,7 +288,7 @@ class PasswordResetSend(FormView):
         message = EmailMessage(
             "email/reset-password.tpl",
             {"token": token, "user": user},
-            "info@test.com",
+            "noreply@salehmzh.ir",
             to=[email],
         )
         EmailThreadSend(message).start()

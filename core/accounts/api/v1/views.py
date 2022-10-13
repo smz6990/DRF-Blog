@@ -67,7 +67,7 @@ class SignUpAPIView(generics.GenericAPIView):
         message_obj = EmailMessage(
             "email/email-verification-api.tpl",
             {"token": token, "user": user},
-            "info@test.com",
+            'noreply@salehmzh.ir',
             to=[email],
         )
         EmailThreadSend(message_obj).start()
@@ -240,7 +240,7 @@ class ResendVerifyEmailGenericAPIView(generics.GenericAPIView):
         message_obj = EmailMessage(
             "email/email-verification-api.tpl",
             {"token": token, "user": user},
-            "info@test.com",
+            "noreply@salehmzh.ir",
             to=[user.email],
         )
         EmailThreadSend(message_obj).start()
@@ -267,7 +267,7 @@ class ResetPasswordGenericAPIView(generics.GenericAPIView):
         email_object = EmailMessage(
             "email/reset-password-api.tpl",
             {"token": token, "user": user},
-            "info@test.com",
+            "noreply@salehmzh.ir",
             to=[user.email],
         )
         EmailThreadSend(email_object).start()

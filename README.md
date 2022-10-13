@@ -1,7 +1,5 @@
 # Blog with Django Rest Framework
 
-
-<!-- ABOUT THE PROJECT -->
 ## About The Project
 
 ##### This is a sample for a blog web application with custom user model and commenting section, each user has its own profile that is customizable and only can see and change by the owner of profile
@@ -29,6 +27,9 @@
 
 
 <!-- GETTING STARTED -->
+
+<hr>
+
 ## Getting Started
 
 This project run in docker and has three phases :
@@ -37,17 +38,24 @@ This project run in docker and has three phases :
 - production
 
 and each phase has its own docker compose file.
+
+<hr>
+
 ## Prerequisites
 
 Frist you need to install <a href="https://docs.docker.com/engine/install/">docker</a> and <a href="https://docs.docker.com/compose/install/">docker compose</a> in your local machine or your cloud host.
 
+<hr>
+
 ## Installation
 After installing the docker and docker compose you need to clone the repo
-1. Clone the repo
+Clone the repo
    ```sh
    git clone https://github.com/smz6990/DRF-Blog.git
    ```
-2. You need to choose which phase do you want to run the project
+You need to choose which phase do you want to run the project
+
+<hr>
 
 ## Run in development phase:
    You have to  be in the same directory of docker-compose.yml file then run:
@@ -89,6 +97,28 @@ the production phase actually done by <a href="https://github.com/AliBigdeli">Al
 
 <hr>
 
+## Tests
+
+This repo comes with the tests for views, forms, models, urls, and for APIs.
+To run test:
+
+  ```sh
+  docker compose exec backend sh -c "pytest ."
+  ```
+
+<hr>
+
+## Linting
+
+I use black and flake8 for linting and reformating for this repo.
+To use linting:
+
+  ```sh
+  docker compose exec backend sh -c"black -l 77 . && flake8 . "
+  ```
+
+  <hr>
+
 ## bonus:
 
   actually this project has another docker compose file and it is docker-compose-locust.yml
@@ -108,7 +138,7 @@ the production phase actually done by <a href="https://github.com/AliBigdeli">Al
  ```sh
  docker compose -f docker-compose-locust.yml stop
  ```
- ##### To remove docke container use:
+ ##### To remove docker container use:
  ```sh
  docker compose -f docker-compose-locust.yml down
  ```
